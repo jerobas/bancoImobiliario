@@ -1,14 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Border.styles'
-import Player from '../../components/player/Player'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
+import Player from '../../components/Player/Player'
+
+const player = new Player(100);
 
 export default function Border() {
+
+
     const componentRef = useRef(null);
 
     const cells = Array.from(Array(40)).map((_) => 1);
 
     const [squarePosition, setSquarePosition] = useState(0);
-    const [dices, setDices] = useState(0);
+    const [dices, setDices] = useState([0, 0]);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
     const [position, setPosition] = useState({
         x: 0,
         y: 0,
@@ -20,7 +25,7 @@ export default function Border() {
     const getPosition = () => {
         if (componentRef.current) {
             const componentPosition = componentRef.current.getBoundingClientRect();
-            return { x: componentPosition.x + componentPosition.width / 2, y: componentPosition.y + componentPosition.height / 2}
+            return { x: componentPosition.x + componentPosition.width / 2, y: componentPosition.y + componentPosition.height / 2 }
         }
     };
 
@@ -30,10 +35,15 @@ export default function Border() {
 
         let dices = d1 + d2;
 
-        setDices(dices)
+        setDices([d1, d2])
+
+        if (destination + dices >= cells.length) {
+            player.add(200)
+        }
 
         setDestination((squarePosition + dices) % cells.length)
         setSquarePosition((squarePosition + 1) % cells.length)
+        setButtonDisabled(true)
     }
 
 
@@ -41,30 +51,33 @@ export default function Border() {
         if (squarePosition !== destination) {
             setTimeout(() => {
                 setSquarePosition((squarePosition + 1) % cells.length);
-            }, 200);
+            }, 200)
         }
-    }, [squarePosition]);
+        if (squarePosition === destination) {
+            setTimeout(() => { setButtonDisabled(false); }, 400)
+        }
+    }, [squarePosition, destination]);
 
-    const valor = (i) => {
-        let tamanho = cells.length;
+    const mappedBoard = (i) => {
+        let size = cells.length;
 
         const reduceTo1 = (initial, value, newInitial) => {
             return newInitial + ((value - initial) / 2)
         }
 
-        if (i <= tamanho / 4) {
+        if (i <= size / 4) {
             return i
         }
-        else if (i < 3 * tamanho / 4 - 1) {
-            if (i % 2 == (tamanho / 4 + 1) % 2) {
-                return reduceTo1(i, (tamanho / 4) + 1, tamanho - 1)
+        else if (i < 3 * size / 4 - 1) {
+            if (i % 2 == (size / 4 + 1) % 2) {
+                return reduceTo1(i, (size / 4) + 1, size - 1)
             }
             else {
-                return reduceTo1((tamanho / 4) + 2, i, (tamanho / 4) + 1)
+                return reduceTo1((size / 4) + 2, i, (size / 4) + 1)
             }
         }
         else {
-            return (tamanho / 2) + (tamanho - 1 - i)
+            return (size / 2) + (size - 1 - i)
         }
     }
 
@@ -93,24 +106,24 @@ export default function Border() {
             })
     }, [squarePosition]);
 
-    const player = new Player;
+
 
     return (
         <>
-            <button onClick={handleDice}>Roll Dices</button>
-            <span>{dices}</span>
+            <button onClick={handleDice} disabled={buttonDisabled}>Roll Dices</button>
+            <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
-            <span>{player.money}</span>
+            <span>{player.toString()}</span>
             <BoardContainer>
                 {
                     cells.map((_, index) =>
                     (
                         <Cell key={`cell-${index}`}>
-                            {valor(index) + 1}
+                            {mappedBoard(index) + 1}
                             {
-                                squarePosition === valor(index) &&
+                                squarePosition === mappedBoard(index) &&
                                 <div
-                                    style={{ 
+                                    style={{
                                         position: 'absolute',
                                         width: '100%',
                                         height: '100%'

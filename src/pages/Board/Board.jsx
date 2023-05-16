@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 import Player from '../../components/Player/Player'
 
-const player = new Player(100);
+const player = new Player(0);
 
-export default function Border() {
-
+export default function Board() {
 
     const componentRef = useRef(null);
 

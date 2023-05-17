@@ -8,7 +8,6 @@ const player = new Player(0);
 
 export default function Board() {
     const user = useSelector(state => state.auth.user);
-    console.log(user)
     const componentRef = useRef(null);
 
     const cells = Array.from(Array(40)).map((_) => 1);

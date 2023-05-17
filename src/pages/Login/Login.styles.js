@@ -3,21 +3,21 @@ import styled from "styled-components";
 
 export const Styles = {
   Container: styled.div`
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
   `,
   Title: styled.h1`
     
   `,
   StyledButton: styled(motion.button)`
-    padding: 10px 20px;
     background-color: #007bff;
-    color: #fff;
     border: none;
     border-radius: 4px;
+    color: #fff;
     cursor: pointer;
     font-size: 16px;
+    padding: 10px 20px;
   `
 }
 

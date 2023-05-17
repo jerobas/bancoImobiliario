@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 export const Styles = {
     Container: styled.main`
+        background-color: #f5f5f5;
         display: flex;
         flex-flow: column nowrap;
-        width: 100%;
         height: 100%;
-        overflow-y: auto;
         overflow-x: hidden;
-        background-color: #f5f5f5;
+        overflow-y: auto;
         padding: 30px;
+        width: 100%;
         @media (max-width: 768px) {
             padding: 50px 30px;
         }
@@ -17,8 +17,8 @@ export const Styles = {
     Content: styled.div`
         display: flex;
         flex-direction: column;
-        width: 100%;
         height: 100vh;
+        width: 100%;
     `,
     Section: styled.section`
         display: flex;

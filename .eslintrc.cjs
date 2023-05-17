@@ -8,8 +8,26 @@ module.exports = {
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'import-helpers'],
   rules: {
     'react-refresh/only-export-components': 'warn',
+    'import-helpers/order-imports': [
+      'warn',
+      {
+          newlinesBetween: 'always',
+          groups: [
+              ["/^react/", "/^next/"],
+              'module',
+              '/^@shared/',
+              "/^src/components/",
+              "/^src/pages/",
+              "/^src/utils/",
+              "/^src/services/",
+              "/^src/styles/",
+              ['parent', 'sibling', 'index'],
+          ],
+          alphabetize: { order: 'asc', ignoreCase: true },
+      },
+  ],
   },
 }

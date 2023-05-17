@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 import Player from '../../components/Player/Player'
+import { useSelector } from 'react-redux';
 
 const player = new Player(0);
 
 export default function Board() {
-
+    const user = useSelector(state => state.auth.user);
+    console.log(user)
     const componentRef = useRef(null);
 
     const cells = Array.from(Array(40)).map((_) => 1);
@@ -113,7 +115,13 @@ export default function Board() {
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             <span>{player.toString()}</span>
-            <BoardContainer>
+            <br />
+            {
+                user && <> 
+                    <span>{JSON.stringify(user)}</span>
+                </>
+            }
+                <BoardContainer>
                 {
                     cells.map((_, index) =>
                     (
@@ -144,6 +152,7 @@ export default function Board() {
                 </ImageContainer>
 
             </BoardContainer>
+           
         </>
     );
 }

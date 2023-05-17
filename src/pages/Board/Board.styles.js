@@ -10,6 +10,7 @@ export const BoardContainer = styled.div`
   border-radius: 8px;
 `;
 
+
 export const Cards = styled.div`
  display: flex;
   background-color: blue;
@@ -54,6 +55,7 @@ export const Cell = styled.div`
   font-size: 12px;
   font-weight: bold;
   position: relative;
+  
 `;
 
 export const Square = styled.div`

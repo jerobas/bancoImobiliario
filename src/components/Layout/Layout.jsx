@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Styles } from './Layout.styles'
 export default function Layout(props) {
     const { children, ...rest } = props;

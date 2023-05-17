@@ -1,10 +1,12 @@
 import React from 'react'
-import GlobalStyles from './styles/global.styles';
-import { ToastContainer } from 'react-toastify'
-import Routes from './Routes/Routes';
 import { Provider } from 'react-redux';
-import store from './pages/Redux/index.js'
+import { ToastContainer } from 'react-toastify'
+
 import { useAuth0 } from '@auth0/auth0-react'
+
+import store from './pages/Redux/index.js'
+import Routes from './Routes/Routes';
+import GlobalStyles from './styles/global.styles';
 function App() {
   const { isLoading, error } = useAuth0()
   return (

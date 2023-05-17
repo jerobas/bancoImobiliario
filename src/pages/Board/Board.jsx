@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
-import Player from '../../components/Player/Player'
 import { useSelector } from 'react-redux';
+
+import Player from '../../components/Player/Player'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 
 const player = new Player(0);
 

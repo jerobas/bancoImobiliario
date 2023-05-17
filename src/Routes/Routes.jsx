@@ -1,9 +1,12 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
-import Board from '../pages/Board/Board';
 import { useSelector, useDispatch } from 'react-redux';
-import Login from '../pages/Login/Login';
+import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
+
 import { useAuth0 } from "@auth0/auth0-react";
+
+import Board from '../pages/Board/Board';
+import Login from '../pages/Login/Login';
+
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const isAuthenticatedLocal = useSelector(state => state.auth.isAuthenticatedLocal);

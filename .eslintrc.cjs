@@ -5,11 +5,10 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
-    'plugin:react-redux/recommended',
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh', 'import-helpers', 'better-styled-components', 'react-redux', 'react-hooks'],
+  plugins: ['react-refresh', 'import-helpers', 'better-styled-components', 'react-hooks'],
   rules: {
     'react-refresh/only-export-components': 'warn',
     'import-helpers/order-imports': [

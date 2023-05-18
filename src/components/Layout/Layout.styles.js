@@ -7,8 +7,8 @@ export const Styles = {
         flex-flow: column nowrap;
         height: 100%;
         overflow-x: hidden;
-        overflow-y: auto;
-        padding: 30px;
+        //overflow-y: auto;
+        //padding: 30px;
         width: 100%;
         @media (max-width: 768px) {
             padding: 50px 30px;
@@ -23,5 +23,6 @@ export const Styles = {
     Section: styled.section`
         display: flex;
         flex-flow: column nowrap;
+        flex-grow: 1;
     `
 }

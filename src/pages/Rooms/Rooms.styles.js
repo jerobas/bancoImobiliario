@@ -1,33 +1,33 @@
 import { styled } from "styled-components";
 
 export const Column = styled.div`
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     height: 100%;
+    justify-content: center;
 `;
 
 export const Row = styled.div`
+    align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     width: 100%;
 `;
 
 export const RoomsContainer = styled(Column)`
-    border-radius: 10px;
     //flex-grow: 1;
     border: 3px solid #FFFFFF;
-    padding: 20px;
+    border-radius: 10px;
     height: min-content;
     min-width: 400px;
+    padding: 20px;
 `;
 
 export const Button = styled.button`
-    border-radius: 5px;
     background-color: aliceblue;
+    border-radius: 5px;
 
     &:disabled {
         background-color: #FF0000;
@@ -35,12 +35,12 @@ export const Button = styled.button`
 `;
 
 export const RoomsPage = styled(Column)`
-    justify-content: start;
-    height: 100%;
     background-size: cover;
-    width: 100%;
-
     color: #FFFFFF;
+    gap: 20px;
+    height: 100%;
+
+    justify-content: start;
 
     h1, h2 {	
         color: #FFFFFF;
@@ -50,13 +50,13 @@ export const RoomsPage = styled(Column)`
         font-size: 40px;
     }
 
-    gap: 20px;
-
     vertical-align: middle;
+
+    width: 100%;
 `;
 
 export const RoomStyle = styled(Row)`
+    cursor: pointer;
     justify-content: space-between;
     padding: 10px;
-    cursor: pointer;
 `;

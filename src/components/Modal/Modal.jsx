@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Container, Wrapper } from "./Modal.styles";
 
 export default function Modal(

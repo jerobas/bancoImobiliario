@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
-
 import CreateRom from '../CreateRom/CreateRom';
 
 export default function Home() {
@@ -41,7 +40,7 @@ export default function Home() {
     }
 
     const handleJoinRoom = () => {
-        setIsVisible(true)
+        // setIsVisible(true)
         // socket.emit('joinRoom', 'aT3NAKC7', '123')
     }
 

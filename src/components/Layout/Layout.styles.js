@@ -2,13 +2,13 @@ import styled from 'styled-components'
 
 export const Styles = {
     Container: styled.main`
+        //overflow-y: auto;
+        //padding: 30px;
         background-color: #f5f5f5;
         display: flex;
         flex-flow: column nowrap;
         height: 100%;
         overflow-x: hidden;
-        //overflow-y: auto;
-        //padding: 30px;
         width: 100%;
         @media (max-width: 768px) {
             padding: 50px 30px;

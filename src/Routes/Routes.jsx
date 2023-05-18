@@ -1,15 +1,15 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
 
 import { useAuth0 } from "@auth0/auth0-react";
 
 import Board from '../pages/Board/Board';
+import Game from '../pages/Game/Game';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
-
-import {socket} from '../services/Auth';
 import Rooms from '../pages/Rooms/Rooms';
+import { socket } from '../services/Auth';
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -21,14 +21,17 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         // socket.emit('createRoom', 'Manolo22', 'senhas')
         // socket.on('roomCreated', (data) => console.log(data))
         socket.emit('getRooms');
-        socket.on('updateRooms', (data, a) => {
+        socket.on('updateRooms', (data, a, roomId, hasPassword, isFull) => {
             dispacth({
                 type: 'ROOMS',
-                payload: data
+                payload: {
+                    rooms: data.map((nome, index) => [nome, a[index], roomId[index], hasPassword[index], isFull[index]]),
+                    numberOfRoom: data.length
+                }
             })
         })
-    },[isAuthenticatedLocal]) 
-    
+    }, [isAuthenticatedLocal])
+
     if (isAuthenticated && !isAuthenticatedLocal) {
         dispacth({
             type: 'LOGIN_SUCCESS',
@@ -51,7 +54,8 @@ export default function Routes() {
                 <Route path="/board" element={< PrivateRoute component={Board} />} />;
                 <Route path="/" element={< PrivateRoute component={Home} />} />;
                 <Route path="/login" element={<Login />} />;
-                <Route path="/rooms" element={<Rooms />} />;
+                <Route path="/rooms" element={< PrivateRoute component={Rooms} />} />;
+                {/* <Route path="/game" element={<Game />} />; */}
             </Switch>
         </Router>
     )

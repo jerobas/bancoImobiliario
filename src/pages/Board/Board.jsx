@@ -2,17 +2,21 @@ import React, { useState, useRef, useEffect } from 'react'
 import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 import Player from '../../components/Player/Player'
 
-const player = new Player(0);
+const players = [
+    new Player(0),
+    new Player(0),
+    new Player(0),
+]
 
 export default function Board() {
 
-    const componentRef = useRef(null);
+    const componentsRef = players.map(e => useRef(null));
 
     const cells = Array.from(Array(40)).map((_) => 1);
-
-    const [squarePosition, setSquarePosition] = useState(0);
     const [dices, setDices] = useState([0, 0]);
+
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [update, setUpdate] = useState(false);
     const [position, setPosition] = useState({
         x: 0,
         y: 0,
@@ -21,14 +25,14 @@ export default function Board() {
     });
     const [destination, setDestination] = useState(0);
 
-    const getPosition = () => {
-        if (componentRef.current) {
-            const componentPosition = componentRef.current.getBoundingClientRect();
+    const getPosition = (i) => {
+        if (componentsRef[i].current) {
+            const componentPosition = componentsRef[i].current.getBoundingClientRect();
             return { x: componentPosition.x + componentPosition.width / 2, y: componentPosition.y + componentPosition.height / 2 }
         }
     };
 
-    const handleDice = () => {
+    const handleDice = (player) => {
         let d1 = Math.floor(Math.random() * 6) + 1;
         let d2 = Math.floor(Math.random() * 6) + 1;
 
@@ -40,22 +44,48 @@ export default function Board() {
             player.add(200)
         }
 
-        setDestination((squarePosition + dices) % cells.length)
-        setSquarePosition((squarePosition + 1) % cells.length)
+        setDestination((player.position + dices) % cells.length)
+        player.setPosition((player.position + 1) % cells.length)
         setButtonDisabled(true)
     }
 
-
     useEffect(() => {
-        if (squarePosition !== destination) {
+        if (players[0].getPosition() !== destination) {
             setTimeout(() => {
-                setSquarePosition((squarePosition + 1) % cells.length);
+                players[0].setPosition((players[0].getPosition() + 1) % cells.length);
+                setUpdate(!update);
             }, 200)
         }
-        if (squarePosition === destination) {
+        if (players[0].getPosition() === destination) {
             setTimeout(() => { setButtonDisabled(false); }, 400)
         }
-    }, [squarePosition, destination]);
+    }, [players[0].getPosition(), destination]);
+
+    useEffect(() => {
+        const { x, y } = getPosition(0);
+        if (position.x !== 0 && position.y !== 0) {
+            if (position.x1 && position.y1)
+                setPosition({
+                    x: position.x1,
+                    y: position.y1,
+                    x1: x,
+                    y1: y
+                })
+            else {
+                setPosition({
+                    x: position.x,
+                    y: position.y,
+                    x1: x,
+                    y1: y
+                })
+            }
+        } else
+            setPosition({
+                x1: x,
+                y1: y,
+            })
+    }, [players[0].getPosition()]);
+
 
     const mappedBoard = (i) => {
         let size = cells.length;
@@ -80,39 +110,13 @@ export default function Board() {
         }
     }
 
-    useEffect(() => {
-        const { x, y } = getPosition();
-        if (position.x !== 0 && position.y !== 0) {
-            if (position.x1 && position.y1)
-                setPosition({
-                    x: position.x1,
-                    y: position.y1,
-                    x1: x,
-                    y1: y
-                })
-            else {
-                setPosition({
-                    x: position.x,
-                    y: position.y,
-                    x1: x,
-                    y1: y
-                })
-            }
-        } else
-            setPosition({
-                x1: x,
-                y1: y,
-            })
-    }, [squarePosition]);
-
-
-
     return (
         <>
-            <button onClick={handleDice} disabled={buttonDisabled}>Roll Dices</button>
+            <button onClick={() => handleDice(players[0])} disabled={buttonDisabled}>Roll Dices</button>
+            <button onClick={() => handleDice(players[1])} disabled={buttonDisabled}>Roll Dices</button>
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
-            <span>{player.toString()}</span>
+            <span>{players[0].toString()}</span>
             <BoardContainer>
                 {
                     cells.map((_, index) =>
@@ -120,24 +124,21 @@ export default function Board() {
                         <Cell key={`cell-${index}`}>
                             {mappedBoard(index) + 1}
                             {
-                                squarePosition === mappedBoard(index) &&
-                                <div
+                                ...players.map((player, i) => player.getPosition() === mappedBoard(index) && <div
                                     style={{
+                                        backgroundColor: ['red', 'green', 'blue'][i],
                                         position: 'absolute',
                                         width: '100%',
                                         height: '100%'
                                     }}
-                                    ref={componentRef}
-                                />
+                                    ref={componentsRef[i]}
+                                />)
                             }
-
                         </Cell>
 
                     ))
                 }
-                < Square
-                    position={position}
-                />
+                {players.map(player => player.render(position))}
                 <ImageContainer >
                     < Cards />
                     < Luck />

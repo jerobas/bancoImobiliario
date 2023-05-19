@@ -22,6 +22,7 @@ export default function Home() {
         };
     }, []);
 
+
     useEffect(() => { socket.emit('getRooms') }, [])
 
     const rooms = useSelector(state => state.room)
@@ -34,21 +35,21 @@ export default function Home() {
 
     const handleLeaveRoom = () => {
         socket.emit('leaveRoom', {
-            roomId: 'Ynojf0yU',
+            roomId: 'imVPnV_2',
             userEmail: user.user.name
         })
     }
 
     const handleJoinRoom = () => {
         socket.emit('joinRoom', {
-            roomId: 'Ynojf0yU',
+            roomId: 'imVPnV_2',
             password: '',
             userEmail: user.user.name
         })
     }
 
     const handleSendMessage = () => {
-        socket.emit('sendMessage', 'Ynojf0yU', message, user.user.name);
+        socket.emit('sendMessage', 'imVPnV_2', message, user.user.name);
         setMessage('');
     };
 

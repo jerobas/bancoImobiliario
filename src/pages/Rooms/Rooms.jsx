@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaLock } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
 import background from '../../assets/temporaryWallpaper.webp';
 import Layout from '../../components/Layout/Layout';
@@ -13,6 +14,7 @@ import { Row, Column, RoomsContainer, RoomsPage, Button, RoomStyle } from './Roo
 export default function Rooms() {
     const salas = useSelector(state => state.room)
     const user = useSelector(state => state.auth)
+    const navigate = useNavigate();
     const [isVisible, setIsVisible] = useState(false)
     const [joinIsVisible, setJoinIsVisible] = useState(false)
     const dispacth = useDispatch()
@@ -21,7 +23,7 @@ export default function Rooms() {
     const [room, setRoom] = useState({
         name: '',
         password: '',
-        hasPasswod: false
+        hasPasswod: false,
     })
 
     const Room = ({ children, selected, onClick }) => <RoomStyle onClick={onClick} style={{ backgroundColor: selected ? '#FFFFFF20' : 'transparent' }}>{children}</RoomStyle>
@@ -29,16 +31,31 @@ export default function Rooms() {
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
             setJoinIsVisible(true)
-            // console.log(room.name, room.password)
-            // socket.emit('joinRoom', room.name, room.password)
+            // socket.emit('joinRoom', {
+            //     roomId: room.name,
+            //     password: '',
+            //     userEmail: user.user.name
+            // })
             // socket.on('joined', data => {
-            //     if (data) socket.emit('getRooms');
+            //     if (data) {
+            //         console.log(room)
+            //         navigate(`/room/${room.name}`)
+            //         socket.emit('getRooms');
+            //     }
             // })
         }
         else {
-            socket.emit('joinRoom', room.name)
+            socket.emit('joinRoom', {
+                roomId: room.name,
+                password: '',
+                userEmail: user.user.name
+            })
             socket.on('joined', data => {
-                if (data) socket.emit('getRooms');
+                if (data) {
+                    console.log(room)
+                    navigate(`/room/${room.name}`)
+                    socket.emit('getRooms');
+                }
             })
         }
     }
@@ -90,6 +107,7 @@ export default function Rooms() {
                             salas && salas.rooms?.map((sala, index) =>
                                 <Room selected={index === selectedRoom} onClick={() => {
                                     setSelectedRoom(index)
+                                    console.log(sala)
                                     setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2], nameShown: sala[0] })
                                     setFull(sala[3])
                                 }} key={index}>

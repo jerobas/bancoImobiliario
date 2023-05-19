@@ -9,7 +9,6 @@ export default function Layout(props) {
     const { children, ...rest } = props;
     return (
         <Styles.Container>
-            {isAuthenticatedLocal && <Logout />}
             <Styles.Content>
                 <Styles.Section {...rest}>
                     {children}

@@ -5,13 +5,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import background from '../../assets/temporaryWallpaper.webp';
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
-import CreateRom from '../CreateRom/CreateRom';
+import CreateRoom from '../CreateRoom/CreateRoom';
+import JoinRoom from '../JoinRoom/JoinRoom';
 import { Row, Column, RoomsContainer, RoomsPage, Button, RoomStyle } from './Rooms.styles';
 
 
 export default function Rooms() {
     const salas = useSelector(state => state.room)
     const [isVisible, setIsVisible] = useState(false)
+    const [joinIsVisible, setJoinIsVisible] = useState(false)
     const dispacth = useDispatch()
     const [selectedRoom, setSelectedRoom] = React.useState(NaN);
     const [joined, setJoined] = useState(false)
@@ -26,11 +28,12 @@ export default function Rooms() {
 
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
-            console.log(room.name, room.password)
-            socket.emit('joinRoom', room.name, room.password)
-            socket.on('joined', data => {
-                if (data) socket.emit('getRooms');
-            })
+            setJoinIsVisible(true)
+            // console.log(room.name, room.password)
+            // socket.emit('joinRoom', room.name, room.password)
+            // socket.on('joined', data => {
+            //     if (data) socket.emit('getRooms');
+            // })
         }
         else {
             console.log(room.name)
@@ -43,7 +46,7 @@ export default function Rooms() {
 
     const CreateRoomButton = () => <Button onClick={() => { setIsVisible(true) }}>Criar sala</Button>
 
-    const JoinRoomButton = () => <Button disabled={full} onClick={() => { handleJoinRoom() }}>Entrar na sala</Button>
+    const JoinRoomButton = () => <Button disabled={full || !(selectedRoom < salas.numberOfRooms)} onClick={() => { handleJoinRoom() }}>Entrar na sala</Button>
 
 
 
@@ -81,7 +84,7 @@ export default function Rooms() {
                 <RoomsPage style={{ backgroundColor: `#030b13AA`, padding: '40px' }}>
                     <h1>Multiplayer Online</h1>
                     <RoomsContainer>
-                        <h2>Salas disponíveis: {salas.numberOfRoom}</h2>
+                        <h2>Salas disponíveis: {salas.numberOfRooms}</h2>
                         <Column style={{ width: '100%', padding: '10px' }}>
                             <input placeholder='Search' style={{ width: '100%', height: '20px', borderRadius: '10px', padding: '0 8px' }} />
                             <Row>
@@ -100,7 +103,7 @@ export default function Rooms() {
                             salas && salas.rooms?.map((sala, index) =>
                                 <Room selected={index === selectedRoom} onClick={() => {
                                     setSelectedRoom(index)
-                                    setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2] })
+                                    setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2], nameShown: sala[0] })
                                     setFull(sala[3])
                                 }} key={index}>
                                     <Row style={{ width: "max-content", gap: '5px' }}>
@@ -117,9 +120,14 @@ export default function Rooms() {
                     </Row>
                 </RoomsPage>
             </RoomsPage>
-            <CreateRom
+            <CreateRoom
                 isOpen={isVisible}
                 handleClose={handleModalClose}
+            />
+            <JoinRoom
+                isOpen={joinIsVisible}
+                handleClose={() => { setJoinIsVisible(false) }}
+                roomName={room.nameShown}
             />
         </Layout >
     )

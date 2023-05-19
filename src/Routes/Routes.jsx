@@ -51,7 +51,7 @@ export default function Routes() {
                 <Route path="/board" element={< PrivateRoute component={Board} />} />;
                 <Route path="/" element={< PrivateRoute component={Home} />} />;
                 <Route path="/login" element={<Login />} />;
-                <Route path="/rooms" element={< PrivateRoute component={Rooms} />} />;
+                <Route path="/rooms" element={<Rooms />} />;
                 {/* <Route path="/game" element={<Game />} />; */}
             </Switch>
         </Router>

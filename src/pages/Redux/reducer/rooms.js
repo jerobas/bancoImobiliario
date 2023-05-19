@@ -5,13 +5,14 @@ const initialState = {
 }
 
 const roomsReducer = (state = initialState, action) => {
-    if(action.type === 'ROOMS'){
+    if (action.type === 'ROOMS') {
         return {
             ...state,
             rooms: action.payload.rooms,
-            numberOfRoom: action.payload.numberOfRooms,
+            numberOfRooms: action.payload.numberOfRooms,
             hasRooms: true,
-        }}
+        }
+    }
     else return state
 }
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
-import CreateRom from '../CreateRom/CreateRom';
+import CreateRoom from '../CreateRoom/CreateRoom';
 
 export default function Home() {
     const [message, setMessage] = useState('');
@@ -47,11 +47,11 @@ export default function Home() {
     const handleSendMessage = () => {
         socket.emit('sendMessage', 'aT3NAKC7', message);
         setMessage('');
-      };
+    };
 
-      const handleModalClose = () => {
+    const handleModalClose = () => {
         setIsVisible(false)
-      }
+    }
     return (
         <Layout>
             <h1>Salas:</h1>
@@ -84,7 +84,7 @@ export default function Home() {
                 <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
                 <button onClick={handleSendMessage}>Enviar</button>
             </div>
-            <CreateRom 
+            <CreateRoom
                 isOpen={isVisible}
                 handleClose={handleModalClose}
             />

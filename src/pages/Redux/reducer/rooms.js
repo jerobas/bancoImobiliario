@@ -9,7 +9,7 @@ const roomsReducer = (state = initialState, action) => {
         return {
             ...state,
             rooms: action.payload.rooms,
-            numberOfRoom: action.payload.numberOfRoom,
+            numberOfRoom: action.payload.numberOfRooms,
             hasRooms: true,
         }}
     else return state

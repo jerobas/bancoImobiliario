@@ -21,13 +21,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         // socket.emit('createRoom', 'Manolo22', 'senhas')
         // socket.on('roomCreated', (data) => console.log(data))
         socket.emit('getRooms');
-        socket.on('updateRooms', (data, a, roomId, hasPassword, isFull) => {
+        socket.on('updateRooms', (data) => {
             dispacth({
                 type: 'ROOMS',
-                payload: {
-                    rooms: data.map((nome, index) => [nome, a[index], roomId[index], hasPassword[index], isFull[index]]),
-                    numberOfRoom: data.length
-                }
+                payload: data
             })
         })
     }, [isAuthenticatedLocal])

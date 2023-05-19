@@ -26,12 +26,18 @@ export default function Rooms() {
 
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
+            console.log(room.name, room.password)
             socket.emit('joinRoom', room.name, room.password)
-            socket.on('joined', data => setJoined(data))
+            socket.on('joined', data => {
+                if (data) socket.emit('getRooms');
+            })
         }
         else {
+            console.log(room.name)
             socket.emit('joinRoom', room.name)
-            socket.on('joined', data => setJoined(data))
+            socket.on('joined', data => {
+                if (data) socket.emit('getRooms');
+            })
         }
     }
 
@@ -49,13 +55,10 @@ export default function Rooms() {
 
     useEffect(() => {
         socket.emit('getRooms');
-        socket.on('updateRooms', (data, a, roomId, hasPassword, isFull) => {
+        socket.on('updateRooms', (data) => {
             dispacth({
                 type: 'ROOMS',
-                payload: {
-                    rooms: data.map((nome, index) => [nome, a[index], roomId[index], hasPassword[index], isFull[index]]),
-                    numberOfRoom: data.length
-                }
+                payload: data
             })
         })
     }, [isVisible])
@@ -63,13 +66,10 @@ export default function Rooms() {
     useEffect(() => {
         if (joined) {
             socket.emit('getRooms');
-            socket.on('updateRooms', (data, a, roomId, hasPassword, isFull) => {
+            socket.on('updateRooms', (data) => {
                 dispacth({
                     type: 'ROOMS',
-                    payload: {
-                        rooms: data.map((nome, index) => [nome, a[index], roomId[index], hasPassword[index], isFull[index]]),
-                        numberOfRoom: data.length
-                    }
+                    payload: data
                 })
             })
         }
@@ -100,14 +100,14 @@ export default function Rooms() {
                             salas && salas.rooms?.map((sala, index) =>
                                 <Room selected={index === selectedRoom} onClick={() => {
                                     setSelectedRoom(index)
-                                    setRoom({ ...setRoom, name: sala[2], hasPasswod: sala[3] ? true : false })
-                                    setFull(sala[4])
+                                    setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2] })
+                                    setFull(sala[3])
                                 }} key={index}>
                                     <Row style={{ width: "max-content", gap: '5px' }}>
                                         <p>{sala[0]}</p>
-                                        {sala[3] ? <FaLock /> : null}
+                                        {sala[2] ? <FaLock /> : null}
                                     </Row>
-                                    <p style={{ color: sala[4] ? 'red' : 'green' }}>{sala[1]}/4</p>
+                                    <p style={{ color: sala[3] ? 'red' : 'green' }}>{sala[4]}/4</p>
                                 </Room>)
                         }
                     </RoomsContainer>

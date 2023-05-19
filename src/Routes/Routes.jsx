@@ -34,6 +34,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         })
     }
 
+
     return isAuthenticatedLocal ? (
         <Component {...rest} />
     ) : (
@@ -45,9 +46,8 @@ export default function Routes() {
     return (
         <Router>
             <Switch>
-                <Route path="/" element={< PrivateRoute component={Home} />} />;
                 <Route path="/login" element={<Login />} />;
-                <Route path="/rooms" element={< PrivateRoute component={Rooms} />} />;
+                <Route path="/" element={< PrivateRoute component={Rooms} />} />;
                 <Route path="/room/:id" element={< PrivateRoute component={Room} />} />;
             </Switch>
         </Router>

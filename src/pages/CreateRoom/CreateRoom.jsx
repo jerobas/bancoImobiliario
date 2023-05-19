@@ -59,6 +59,7 @@ export default function CreateRom({
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    border: 'none'
                 }}>
                     <div style={{
                         height: '36px',

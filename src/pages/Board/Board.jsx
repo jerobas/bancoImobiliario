@@ -115,13 +115,7 @@ export default function Board() {
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             <span>{player.toString()}</span>
-            <br />
-            {
-                user && <> 
-                    <span>{JSON.stringify(user)}</span>
-                </>
-            }
-                <BoardContainer>
+            <BoardContainer>
                 {
                     cells.map((_, index) =>
                     (
@@ -152,7 +146,7 @@ export default function Board() {
                 </ImageContainer>
 
             </BoardContainer>
-           
+
         </>
     );
 }

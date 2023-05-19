@@ -2,7 +2,7 @@ import GoogleFontLoader from 'react-google-font-loader';
 
 import { createGlobalStyle } from 'styled-components'
 
-const GlobalStyle  = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -75,6 +75,36 @@ const GlobalStyle  = createGlobalStyle`
     cursor: pointer;
   }
 
+ 
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 10px;
+  }
+  
+  ul::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #F5F5F5;
+  }
+
+  ul::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #58606C;
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #474C53;
+  }
+  
   ::placeholder {
       color: #D8D8D8;
       opacity: 1; /* Chrome, Firefox, Opera, Safari 10.1+ */

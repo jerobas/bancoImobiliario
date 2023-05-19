@@ -11,10 +11,10 @@ import { Row, Column, RoomsContainer, RoomsPage, Button, RoomStyle } from './Roo
 
 export default function Rooms() {
     const salas = useSelector(state => state.room)
+    const user = useSelector(state => state.auth)
     const [isVisible, setIsVisible] = useState(false)
     const dispacth = useDispatch()
     const [selectedRoom, setSelectedRoom] = React.useState(NaN);
-    const [joined, setJoined] = useState(false)
     const [full, setFull] = useState(false)
     const [room, setRoom] = useState({
         name: '',
@@ -33,7 +33,6 @@ export default function Rooms() {
             })
         }
         else {
-            console.log(room.name)
             socket.emit('joinRoom', room.name)
             socket.on('joined', data => {
                 if (data) socket.emit('getRooms');
@@ -52,7 +51,6 @@ export default function Rooms() {
     }
 
 
-
     useEffect(() => {
         socket.emit('getRooms');
         socket.on('updateRooms', (data) => {
@@ -63,17 +61,6 @@ export default function Rooms() {
         })
     }, [isVisible])
 
-    useEffect(() => {
-        if (joined) {
-            socket.emit('getRooms');
-            socket.on('updateRooms', (data) => {
-                dispacth({
-                    type: 'ROOMS',
-                    payload: data
-                })
-            })
-        }
-    }, [joined])
 
     return (
         <Layout>

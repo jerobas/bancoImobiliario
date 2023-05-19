@@ -18,8 +18,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     const dispacth = useDispatch()
 
     useEffect(() => {
-        // socket.emit('createRoom', 'Manolo22', 'senhas')
-        // socket.on('roomCreated', (data) => console.log(data))
         socket.emit('getRooms');
         socket.on('updateRooms', (data) => {
             dispacth({
@@ -27,7 +25,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                 payload: data
             })
         })
-    }, [isAuthenticatedLocal])
+    }, [])
 
     if (isAuthenticated && !isAuthenticatedLocal) {
         dispacth({

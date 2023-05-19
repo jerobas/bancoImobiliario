@@ -56,6 +56,7 @@ export default function Home() {
     const handleModalClose = () => {
         setIsVisible(false)
     }
+    
     return (
         <Layout>
             <h1>Salas:</h1>

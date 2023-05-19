@@ -11,6 +11,8 @@ export const Styles = {
     display: flex;
     height: 100%;
     justify-content: center;
+    justify-self: center;
+    
   `,
   Content: styled.div`
     align-items: center;
@@ -20,7 +22,7 @@ export const Styles = {
     max-width: 0 1200px;
   `,
   TypingText: styled.span`
-    color: #fff;
+    color: ${props => props.theme.colors.White};
     cursor: default;
     display: inline-block;
     font-size: 1.5rem;
@@ -30,7 +32,7 @@ export const Styles = {
     white-space: nowrap;
   `,
    Line: styled.div`
-    background-color: #fff;
+    background-color:  ${props => props.theme.colors.White};;
     border: 8px; 
     height: 0.05rem;
     left: 0;
@@ -45,7 +47,7 @@ export const Styles = {
     color: #fff;
     cursor: pointer;
     font-size: 16px;
-    letter-spacing: 0.0755rem
+    letter-spacing: 0.0755rem;
     padding: 10px 20px;
   `
 }

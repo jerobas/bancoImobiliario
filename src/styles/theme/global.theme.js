@@ -12,7 +12,10 @@ export const globalTheme = {
         Shurima: '#fada3c',
         Demacia: '#ebdfc0',
         PnZ: '#e39b25',
-        Bandopolis: '#d6cc4d'
+        Bandopolis: '#d6cc4d',
+        White: '#ffffff',
+        White_300: '#f6f6f6',
+        White_400: '#ececec'
     },
     darkest: {
         gray: '#474C53',

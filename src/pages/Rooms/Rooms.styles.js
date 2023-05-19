@@ -17,20 +17,44 @@ export const Row = styled.div`
 `;
 
 export const RoomsContainer = styled(Column)`
-    //flex-grow: 1;
     border: 3px solid #FFFFFF;
     border-radius: 10px;
     height: min-content;
     min-width: 400px;
     padding: 20px;
+
+    input{
+        border: none;
+        border-radius: 8px;
+        height: 2rem;
+        outline: none;
+        padding: 0 .5rem;
+        width: 100%;
+    }
 `;
 
 export const Button = styled.button`
-    background-color: aliceblue;
-    border-radius: 5px;
+    align-items: center;
+    background-color: ${props => props.theme.colors.White_400};
+    border: none;
+    border-radius: 8px;
+    color: ${props => props.theme.dark.blue};
+    display: flex;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 1.75rem;
+    justify-content: center;
+    letter-spacing: 0.047rem;
+    outline: none;
+    padding: 0.7rem;
+    transition: .4s ease all;
+    width: auto;
 
+    &:hover{
+      color: ${props => props.theme.vivid.blue};
+    }
     &:disabled {
-        background-color: #FF0000;
+        display: none;
     }	
 `;
 

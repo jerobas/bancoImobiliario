@@ -1,11 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
+import { useSelector } from 'react-redux'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
-import { Container } from './JoinRoom.styles'
+import { Container, ErrorMessage } from './JoinRoom.styles'
 
+
+
+const joinRoomSchema = z.object({
+    password: z.string().nonempty('A senha é obrigatória!'),
+})
 
 const CustomColumn = ({ children }) => <Column style={{
     alignItems: 'flex-start',
@@ -15,19 +25,32 @@ const CustomColumn = ({ children }) => <Column style={{
 }}>{children}</Column>
 
 export default function JoinRoom({
-    handleClose, isOpen, roomName,
+    handleClose, isOpen, roomName, roomId
 }) {
 
-    const [formData, setFormData] = useState({
-        roomName: '',
-        password: '',
-    })
+    const user = useSelector(state => state.auth)
 
-    const handleCreateRoom = () => {
-        socket.emit('createRoom', formData.roomName, formData.password)
-        handleClose()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors } } = useForm({
+            mode: 'onChange',
+            shouldFocusError: true,
+            reValidateMode: 'onChange',
+            resolver: zodResolver(joinRoomSchema)
+        })
+
+
+    const handleJoinRoom = (data) => {
+        if (data.password) {
+            socket.emit('joinRoom', {
+                roomId: roomId,
+                password: data.password,
+                userEmail: user.user.name
+            })
+            handleClose()
+        }
     }
-
 
 
     return (
@@ -40,7 +63,7 @@ export default function JoinRoom({
         >
             <Container>
                 <header style={{
-                    padding: '20px 10px',
+                    padding: '1rem',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -49,16 +72,8 @@ export default function JoinRoom({
                         height: '36px',
                         width: '36px',
                     }} />
-                    <h1 style={{ fontSize: '26px' }}>Entrar na sala</h1>
-                    <button style={{
-                        height: '36px',
-                        width: '36px',
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }} onClick={() => handleClose()}>
+                    <h1>{roomName}</h1>
+                    <button onClick={() => handleClose()}>
                         <FaTimes
                             style={{
                                 fontSize: '20px',
@@ -68,16 +83,18 @@ export default function JoinRoom({
                     </button>
                 </header>
                 <main>
-                    <form>
+                    <form onSubmit={handleSubmit(handleJoinRoom)}>
                         <Column>
                             <CustomColumn>
-                                <h2>{roomName}</h2>
-                            </CustomColumn>
-                            <CustomColumn>
                                 <label>Senha da sala: </label>
-                                <input style={{ width: '100%' }} type="password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} value={formData.password} />
+                                <input
+                                    type="password"
+                                    autoComplete="off"
+                                    {...register('password')}
+                                />
+                                {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
                             </CustomColumn>
-                            <button onClick={handleCreateRoom}>Entrar na sala</button>
+                            <button onClick={handleJoinRoom}>Entrar</button>
                         </Column>
                     </form>
                 </main>

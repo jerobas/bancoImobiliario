@@ -1,16 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
-import { Container } from './CreateRoom.styles'
+import { Container, ErrorMessage } from './CreateRoom.styles'
 
+
+const createRoomSchema = z.object({
+    name: z.string().nonempty('O nome é obrigatório!').toLowerCase(),
+    password: z.string()
+})
 
 const CustomColumn = ({ children }) => <Column style={{
     alignItems: 'flex-start',
     width: '100%',
-    gap: '10px',
+    gap: '0.08rem',
     marginBottom: '20px',
 }}>{children}</Column>
 
@@ -18,14 +27,21 @@ export default function CreateRom({
     handleClose, isOpen
 }) {
 
-    const [formData, setFormData] = useState({
-        roomName: '',
-        password: '',
-    })
+    const {
+        register,
+        handleSubmit,
+        formState: { errors } } = useForm({
+            mode: 'onChange',
+            shouldFocusError: true,
+            reValidateMode: 'onChange',
+            resolver: zodResolver(createRoomSchema)
+        })
 
-    const handleCreateRoom = () => {
-        socket.emit('createRoom', formData.roomName, formData.password)
-        handleClose()
+    const handleCreateRoom = (data) => {
+        if (data.name) {
+            socket.emit('createRoom', data.name, data.password)
+            handleClose()
+        }
     }
 
 
@@ -39,7 +55,7 @@ export default function CreateRom({
         >
             <Container>
                 <header style={{
-                    padding: '20px 10px',
+                    padding: '1rem',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -48,16 +64,8 @@ export default function CreateRom({
                         height: '36px',
                         width: '36px',
                     }} />
-                    <h1 style={{ fontSize: '26px' }}>Criar Sala</h1>
-                    <button style={{
-                        height: '36px',
-                        width: '36px',
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }} onClick={() => handleClose()}>
+                    <h1>Criar Sala</h1>
+                    <button onClick={() => handleClose()}>
                         <FaTimes
                             style={{
                                 fontSize: '20px',
@@ -67,15 +75,24 @@ export default function CreateRom({
                     </button>
                 </header>
                 <main>
-                    <form>
+                    <form onSubmit={handleSubmit(handleCreateRoom)}>
                         <Column>
                             <CustomColumn>
                                 <label>Nome da sala: </label>
-                                <input style={{ width: '100%' }} type="text" onChange={(e) => setFormData({ ...formData, roomName: e.target.value })} value={formData.roomName} />
+                                <input
+                                    type="text"
+                                    autoComplete="off"
+                                    {...register('name')}
+                                />
+                                {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
                             </CustomColumn>
                             <CustomColumn>
                                 <label>Senha da sala: </label>
-                                <input style={{ width: '100%' }} type="password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} value={formData.password} />
+                                <input
+                                    type="password"
+                                    autoComplete="off"
+                                    {...register('password')}
+                                />
                             </CustomColumn>
                             <button onClick={handleCreateRoom}>Criar</button>
                         </Column>

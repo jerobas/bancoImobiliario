@@ -13,39 +13,42 @@ export default function Home() {
         roomName: '',
         password: '',
     })
-
     useEffect(() => {
-        socket.on('receiveMessage', (senderId, message) => {
-            setMessages((prevMessages) => [...prevMessages, { senderId, message }]);
+        socket.on('receiveMessage', (message, users) => {
+            setMessages((prevMessages) => [...prevMessages, { users, message }]);
         });
-
         return () => {
             socket.off('receiveMessage');
         };
     }, []);
 
-    const rooms = useSelector(state => state.room)
+    useEffect(() => { socket.emit('getRooms') }, [])
 
-    const handleCreateRoom = (e) => {
-        e.preventDefault()
+    const rooms = useSelector(state => state.room)
+    const user = useSelector(state => state.auth)
+
+    const handleCreateRoom = () => {
         socket.emit('createRoom', formData.roomName, formData.password)
-        socket.on('roomCreated', (data) => {
-            // console.log(data)
-            // window.location.reload()
-        })
+
     }
 
     const handleLeaveRoom = () => {
-        socket.emit('leaveRoom', 'aT3NAKC7')
+        socket.emit('leaveRoom', {
+            roomId: 'Ynojf0yU',
+            userEmail: user.user.name
+        })
     }
 
     const handleJoinRoom = () => {
-        // setIsVisible(true)
-        // socket.emit('joinRoom', 'aT3NAKC7', '123')
+        socket.emit('joinRoom', {
+            roomId: 'Ynojf0yU',
+            password: '',
+            userEmail: user.user.name
+        })
     }
 
     const handleSendMessage = () => {
-        socket.emit('sendMessage', 'aT3NAKC7', message);
+        socket.emit('sendMessage', 'Ynojf0yU', message, user.user.name);
         setMessage('');
     };
 
@@ -59,7 +62,7 @@ export default function Home() {
             {
                 rooms.hasRooms && rooms.rooms.map((room, i) =>
                     <div key={i}>
-                        <span>{room}</span>
+                        <span>{room[0]}</span>
                         <button onClick={handleJoinRoom}>Entra na sala</button>
                         <button onClick={handleLeaveRoom}>Sair da sala</button>
                     </div>)
@@ -76,7 +79,7 @@ export default function Home() {
                 <ul>
                     {messages.map((msg, index) => (
                         <li key={index}>
-                            <strong>{msg.senderId}: </strong>
+                            <strong>{msg.users}: </strong>
                             {msg.message}
                         </li>
                     ))}

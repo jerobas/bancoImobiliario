@@ -47,7 +47,7 @@ export const Styles = {
         }
         #icon{
             margin-left: 0.42rem;
-            margin-right: .3rem
+            margin-right: .3rem;
             opacity: .2;
         }
         > div{
@@ -61,7 +61,7 @@ export const Styles = {
             width: 100%;
         }
         input{
-            background: transparent
+            background: transparent;
             border: none;
             border-radius: 8px;
             color: ${props => props.theme.dark.black};

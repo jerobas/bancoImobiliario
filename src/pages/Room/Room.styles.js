@@ -60,6 +60,11 @@ export const Styles = {
             justify-content: space-between;
             outline: none;
             width: 100%;
+
+            &:focus-within{
+                
+            }
+
         }
         input{
             background: transparent;

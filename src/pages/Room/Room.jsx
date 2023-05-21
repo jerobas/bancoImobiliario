@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { BsFillChatDotsFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams  } from 'react-router-dom'
 
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
 import Board from '../Board/Board';
 import { Styles } from './Room.styles'
+import {globalTheme} from '../../styles/theme/global.theme'
 
 export default function Room() {
-
   const user = useSelector(state => state.auth.user.name)
   const { id } = useParams()
 
@@ -56,9 +56,11 @@ export default function Room() {
               {messages.map((msg, index) => (
                 <li
                   key={index}
-                  style={{ justifyContent: msg.users === user ? 'left' : 'right' }}
+                  style={{ justifyContent: msg.users === user ? 'left' : 'right'}}
                 >
-                  <strong>{msg.users}:</strong>
+                  <strong
+                    style={{color: msg.users !== 'Sistema' ? globalTheme.vivid.black : globalTheme.vivid.green}}
+                  >{msg.users}:</strong>
                   {msg.message}
                 </li>
               ))}

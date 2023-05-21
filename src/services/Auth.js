@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-export const socket = io(import.meta.env.VITE_SOCKET_API_AWS)
+export const socket = io(import.meta.env.VITE_SOCKET_API)
 export const TOKEN_KEY = '@bi-token'
 export const TOKEN_KEY_USER = '@bi-user'
 export const isAlreadyAuthenticated = () => localStorage.getItem(TOKEN_KEY) !== null

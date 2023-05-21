@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
-import Board from '../Board/Board';
+import Board from '../../components/Board/Board';
 import { Styles } from './Room.styles'
 
 export default function Room() {

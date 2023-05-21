@@ -4,22 +4,28 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Player from '../../components/Player/Player'
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square, StartGame} from './Board.styles'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square, StartGame } from './Board.styles'
 
-import {socket} from '../../services/Auth'
+import { socket } from '../../services/Auth'
 
-const player = new Player(0);
+import { mapBoard } from '../../utils';
+
+const players = [
+    new Player(0),
+    new Player(0),
+    new Player(0),
+]
 
 export default function Board() {
-    const {id} = useParams()
+    const { id } = useParams()
     const user = useSelector(state => state.auth.user);
-    const componentRef = useRef(null);
+    const componentsRef = players.map(e => useRef(null));
 
     const cells = Array.from(Array(40)).map((_) => 1);
-
-    const [squarePosition, setSquarePosition] = useState(0);
     const [dices, setDices] = useState([0, 0]);
+
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [update, setUpdate] = useState(false);
     const [position, setPosition] = useState({
         x: 0,
         y: 0,
@@ -29,22 +35,20 @@ export default function Board() {
     const [destination, setDestination] = useState(0);
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
 
-
     // const [players, setPlayers] = useState({
     //     position,
     //     money: 0,
     //     cards: []
     // });
-    
 
-    const getPosition = () => {
-        if (componentRef.current) {
-            const componentPosition = componentRef.current.getBoundingClientRect();
+    const getPosition = (i) => {
+        if (componentsRef[i].current) {
+            const componentPosition = componentsRef[i].current.getBoundingClientRect();
             return { x: componentPosition.x + componentPosition.width / 2, y: componentPosition.y + componentPosition.height / 2 }
         }
     };
 
-    const handleDice = () => {
+    const handleDice = (player) => {
         let d1 = Math.floor(Math.random() * 6) + 1;
         let d2 = Math.floor(Math.random() * 6) + 1;
 
@@ -56,48 +60,25 @@ export default function Board() {
             player.add(200)
         }
 
-        setDestination((squarePosition + dices) % cells.length)
-        setSquarePosition((squarePosition + 1) % cells.length)
+        setDestination((player.position + dices) % cells.length)
+        player.setPosition((player.position + 1) % cells.length)
         setButtonDisabled(true)
     }
 
-
     useEffect(() => {
-        if (squarePosition !== destination) {
+        if (players[0].getPosition() !== destination) {
             setTimeout(() => {
-                setSquarePosition((squarePosition + 1) % cells.length);
+                players[0].setPosition((players[0].getPosition() + 1) % cells.length);
+                setUpdate(!update);
             }, 200)
         }
-        if (squarePosition === destination) {
+        if (players[0].getPosition() === destination) {
             setTimeout(() => { setButtonDisabled(false); }, 400)
         }
-    }, [squarePosition, destination]);
-
-    const mappedBoard = (i) => {
-        let size = cells.length;
-
-        const reduceTo1 = (initial, value, newInitial) => {
-            return newInitial + ((value - initial) / 2)
-        }
-
-        if (i <= size / 4) {
-            return i
-        }
-        else if (i < 3 * size / 4 - 1) {
-            if (i % 2 == (size / 4 + 1) % 2) {
-                return reduceTo1(i, (size / 4) + 1, size - 1)
-            }
-            else {
-                return reduceTo1((size / 4) + 2, i, (size / 4) + 1)
-            }
-        }
-        else {
-            return (size / 2) + (size - 1 - i)
-        }
-    }
+    }, [players[0].getPosition(), destination]);
 
     useEffect(() => {
-        const { x, y } = getPosition();
+        const { x, y } = getPosition(0);
         if (position.x !== 0 && position.y !== 0) {
             if (position.x1 && position.y1)
                 setPosition({
@@ -119,7 +100,7 @@ export default function Board() {
                 x1: x,
                 y1: y,
             })
-    }, [squarePosition]);
+    }, [players[0].getPosition()]);
 
     useEffect(() => {
         socket.emit('getPlayers', id)
@@ -131,21 +112,25 @@ export default function Board() {
         socket.on('playersStates', (data) => {
             console.log(data)
         })
-    },[])
+    }, [])
+
+    const handleGameStateUpdate = (data) => {
+        console.log('recieved game update')
+        console.log(data)
+    }
 
     const handleStartGame = () => {
         socket.emit('startGame', id)
-        socket.on('startGame', data => console.log(data))
+        socket.on('gameStateUpdated', data => handleGameStateUpdate(data))
     }
-
-
 
     return (
         <>
-            <button onClick={handleDice} disabled={buttonDisabled}>Roll Dices</button>
+            <button onClick={() => handleDice(players[0])} disabled={buttonDisabled}>Roll Dices</button>
+            <button onClick={() => handleDice(players[1])} disabled={buttonDisabled}>Roll Dices</button>
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
-            <span>{player.toString()}</span>
+            <span>{players[0].toString()}</span>
             <StartGame
                 onClick={handleStartGame}
             >
@@ -157,41 +142,37 @@ export default function Board() {
                     cells.map((_, index) =>
                     (
                         <Cell key={`cell-${index}`}>
-                            {mappedBoard(index) + 1}
+                            {mapBoard(index, cells.length) + 1}
                             {
-                                squarePosition === mappedBoard(index) &&
-                                <div
+                                ...players.map((player, i) => player.getPosition() === mapBoard(index, cells.length) && <div
                                     style={{
+                                        backgroundColor: ['red', 'green', 'blue'][i],
                                         position: 'absolute',
                                         width: '100%',
                                         height: '100%'
                                     }}
-                                    ref={componentRef}
-                                />
+                                    ref={componentsRef[i]}
+                                />)
                             }
-
                         </Cell>
 
                     ))
                 }
-                   <div style={{display: 'flex', marginRight: '20px;'}}>
-                   {
-                //  < Square
-                //  key={data}
-                //  position={position}
-                //  />
-                [...Array(numberOfPlayers).keys()].map(data=> (
-                    <span>{data}</span>
-                ))
-               }
-                   </div>
-              
+                {players.map(player => player.render(position))}
+                <div style={{ display: 'flex', marginRight: '20px;' }}>
+                    {
+                        [...Array(numberOfPlayers).keys()].map(data => (
+                            <span>{data}</span>
+                        ))
+                    }
+                </div>
+
                 <ImageContainer >
                     < Cards />
                     < Luck />
                 </ImageContainer>
 
-            </BoardContainer>
+            </BoardContainer >
 
         </>
     );

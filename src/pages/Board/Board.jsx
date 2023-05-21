@@ -1,12 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 
+import { useParams } from 'react-router-dom';
+
 import Player from '../../components/Player/Player'
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square, StartGame} from './Board.styles'
+
+import {socket} from '../../services/Auth'
 
 const player = new Player(0);
 
 export default function Board() {
+    const {id} = useParams()
     const user = useSelector(state => state.auth.user);
     const componentRef = useRef(null);
 
@@ -22,6 +27,15 @@ export default function Board() {
         y1: 0
     });
     const [destination, setDestination] = useState(0);
+    const [numberOfPlayers, setNumberOfPlayers] = useState(0);
+
+
+    // const [players, setPlayers] = useState({
+    //     position,
+    //     money: 0,
+    //     cards: []
+    // });
+    
 
     const getPosition = () => {
         if (componentRef.current) {
@@ -107,6 +121,23 @@ export default function Board() {
             })
     }, [squarePosition]);
 
+    useEffect(() => {
+        socket.emit('getPlayers', id)
+        socket.on('returnPlayer', (data) => {
+            setNumberOfPlayers(data)
+        })
+
+        socket.emit('getPlayersStates', id)
+        socket.on('playersStates', (data) => {
+            console.log(data)
+        })
+    },[])
+
+    const handleStartGame = () => {
+        socket.emit('startGame', id)
+        socket.on('startGame', data => console.log(data))
+    }
+
 
 
     return (
@@ -115,7 +146,13 @@ export default function Board() {
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             <span>{player.toString()}</span>
+            <StartGame
+                onClick={handleStartGame}
+            >
+                Start
+            </StartGame>
             <BoardContainer>
+
                 {
                     cells.map((_, index) =>
                     (
@@ -137,9 +174,18 @@ export default function Board() {
 
                     ))
                 }
-                < Square
-                    position={position}
-                />
+                   <div style={{display: 'flex', marginRight: '20px;'}}>
+                   {
+                //  < Square
+                //  key={data}
+                //  position={position}
+                //  />
+                [...Array(numberOfPlayers).keys()].map(data=> (
+                    <span>{data}</span>
+                ))
+               }
+                   </div>
+              
                 <ImageContainer >
                     < Cards />
                     < Luck />

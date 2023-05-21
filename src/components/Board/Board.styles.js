@@ -11,6 +11,28 @@ export const BoardContainer = styled.div`
 `;
 
 
+export const StartGame = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  width: 4.5rem;
+  height: 2.5rem;
+  padding: 0.075rem;
+  background-color: ${props => props.theme.dark.blue};
+  color: ${props => props.theme.colors.White_300};
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  letter-spacing: 1.2px;
+
+  &:focus{
+    border-color: ${props => props.theme.darkest.blue};
+  }
+`
+
+
 export const Cards = styled.div`
  align-self: flex-start;
   background-color: blue;

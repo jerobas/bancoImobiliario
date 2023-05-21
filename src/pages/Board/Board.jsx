@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
+import { useSelector } from 'react-redux';
+
 import Player from '../../components/Player/Player'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 
 const players = [
     new Player(0),
@@ -9,7 +11,7 @@ const players = [
 ]
 
 export default function Board() {
-
+    const user = useSelector(state => state.auth.user);
     const componentsRef = players.map(e => useRef(null));
 
     const cells = Array.from(Array(40)).map((_) => 1);
@@ -145,6 +147,7 @@ export default function Board() {
                 </ImageContainer>
 
             </BoardContainer>
+
         </>
     );
 }

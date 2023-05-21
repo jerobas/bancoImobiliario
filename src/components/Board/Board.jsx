@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import Player from '../../components/Player/Player'
 import { BoardContainer, Cell, Cards, ImageContainer, Luck, Square } from './Board.styles'
 
+import { mapBoard } from '../../utils';
+
 const players = [
     new Player(0),
     new Player(0),
@@ -88,30 +90,6 @@ export default function Board() {
             })
     }, [players[0].getPosition()]);
 
-
-    const mappedBoard = (i) => {
-        let size = cells.length;
-
-        const reduceTo1 = (initial, value, newInitial) => {
-            return newInitial + ((value - initial) / 2)
-        }
-
-        if (i <= size / 4) {
-            return i
-        }
-        else if (i < 3 * size / 4 - 1) {
-            if (i % 2 == (size / 4 + 1) % 2) {
-                return reduceTo1(i, (size / 4) + 1, size - 1)
-            }
-            else {
-                return reduceTo1((size / 4) + 2, i, (size / 4) + 1)
-            }
-        }
-        else {
-            return (size / 2) + (size - 1 - i)
-        }
-    }
-
     return (
         <>
             <button onClick={() => handleDice(players[0])} disabled={buttonDisabled}>Roll Dices</button>
@@ -124,9 +102,9 @@ export default function Board() {
                     cells.map((_, index) =>
                     (
                         <Cell key={`cell-${index}`}>
-                            {mappedBoard(index) + 1}
+                            {mapBoard(index, cells.length) + 1}
                             {
-                                ...players.map((player, i) => player.getPosition() === mappedBoard(index) && <div
+                                ...players.map((player, i) => player.getPosition() === mapBoard(index, cells.length) && <div
                                     style={{
                                         backgroundColor: ['red', 'green', 'blue'][i],
                                         position: 'absolute',

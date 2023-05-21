@@ -35,13 +35,11 @@ export default function Board() {
     const [destination, setDestination] = useState(0);
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
 
-
     // const [players, setPlayers] = useState({
     //     position,
     //     money: 0,
     //     cards: []
     // });
-
 
     const getPosition = (i) => {
         if (componentsRef[i].current) {
@@ -116,9 +114,14 @@ export default function Board() {
         })
     }, [])
 
+    const handleGameStateUpdate = (data) => {
+        console.log('recieved game update')
+        console.log(data)
+    }
+
     const handleStartGame = () => {
         socket.emit('startGame', id)
-        socket.on('startGame', data => console.log(data))
+        socket.on('gameStateUpdated', data => handleGameStateUpdate(data))
     }
 
     return (
@@ -158,10 +161,6 @@ export default function Board() {
                 {players.map(player => player.render(position))}
                 <div style={{ display: 'flex', marginRight: '20px;' }}>
                     {
-                        //  < Square
-                        //  key={data}
-                        //  position={position}
-                        //  />
                         [...Array(numberOfPlayers).keys()].map(data => (
                             <span>{data}</span>
                         ))

@@ -1,4 +1,4 @@
-//import { Square } from '../../pages/Board/Board.styles'
+import { Square } from '../Board/Board.styles'
 
 class Player {
     constructor(amount) {
@@ -23,7 +23,7 @@ class Player {
     }
 
     render(position) {
-        //return <Square position={position} />
+        return <Square position={position} />
     }
 }
 

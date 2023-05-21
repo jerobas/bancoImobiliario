@@ -32,6 +32,10 @@ export default function Rooms() {
 
     const Room = ({ children, selected, onClick }) => <RoomStyle onClick={onClick} style={{ backgroundColor: selected ? '#FFFFFF20' : 'transparent' }}>{children}</RoomStyle>
 
+    useEffect(() => {
+        console.log('d')
+    },[true])
+
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
             setJoinIsVisible(true)
@@ -66,7 +70,6 @@ export default function Rooms() {
         setIsVisible(false)
     }
 
-
     useEffect(() => {
         socket.emit('getRooms');
         socket.on('updateRooms', (data) => {
@@ -75,7 +78,7 @@ export default function Rooms() {
                 payload: data
             })
         })
-    }, [isVisible])
+    }, [])
 
     useEffect(() => {
         setSearchInput('');

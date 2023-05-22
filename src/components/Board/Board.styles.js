@@ -16,6 +16,10 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 
+  >div{
+    min-height: 2rem;
+  }
+
   button{
     width: 8rem;
     border: none;
@@ -27,7 +31,7 @@ export const Wrapper = styled.div`
     letter-spacing: 1.2px;
     font-size: 1rem;
   }
-  
+
 ` 
 
 export const GameLayout = styled.div`

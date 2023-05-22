@@ -136,10 +136,13 @@ export default function Board() {
 
     return (
         <Wrapper>
+            <div>
             {
                 diceWinners[currentTurn] && diceWinners[currentTurn] == socket.id && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
                  
             }
+            </div>
+          
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             {

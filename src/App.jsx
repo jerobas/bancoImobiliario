@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react'
 import { ThemeProvider } from 'styled-components'
 
-import store from './pages/Redux/index.js'
-import Routes from './Routes/Routes';
+import store from './pages/Redux'
+import Routes from './routes/Routes';
 import GlobalStyles from './styles/global.styles';
 import { globalTheme } from './styles/theme/global.theme';
 
@@ -14,16 +14,16 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={globalTheme}>
-      {error && <p>Authentication Error</p>}
-      {
-        !error && !isLoading && (
-          <>
-            <GlobalStyles />
-            <Routes />
-          </>
-        )
-      }
-  </ThemeProvider>
+        {error && <p>Authentication Error</p>}
+        {
+          !error && !isLoading && (
+            <>
+              <GlobalStyles />
+              <Routes />
+            </>
+          )
+        }
+      </ThemeProvider>
     </Provider>
   )
 }

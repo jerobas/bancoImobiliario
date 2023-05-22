@@ -13,7 +13,7 @@ import { Column } from '../Rooms/Rooms.styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, ErrorMessage } from './CreateRoom.styles'
 const createRoomSchema = z.object({
-    name: z.string().nonempty('O nome é obrigatório!').toLowerCase().min(5, 'Precisa ter no mínimo 5 letras!'),
+    name: z.string().nonempty('O nome é obrigatório!').toLowerCase().min(1, 'Precisa ter no mínimo 1 letra!').max(15, 'Pode ter no máximo 15 letras!'),
     password: z.string()
 })
 

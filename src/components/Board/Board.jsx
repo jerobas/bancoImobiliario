@@ -26,8 +26,8 @@ export default function Board() {
     const [renderedPosition, setRenderedPosition] = useState([]);
     const [visible, setVisible] = useState(false);
     const [userOwner, setUserOwner] = useState()
-    const [diceWinners, setDiceWinners] = useState();
-    const [turn, setTurn] = useState()
+    const [diceWinners, setDiceWinners] = useState([]);
+    const [currentTurn, setCurrentTurn] = useState(0)
 
     /*These two states are only used because objects' equality is not checked by React in the useEffect hook.*/
     const [recalculate, setRecalculate] = useState(false);
@@ -47,11 +47,11 @@ export default function Board() {
         let d1 = Math.floor(Math.random() * 6) + 1;
         let d2 = Math.floor(Math.random() * 6) + 1;
 
-        let dicesSum = d1 + d2;
+        let dicesSum = d1 + d2;       
 
         setDices([d1, d2])
         setButtonDisabled(true)
-        socket.emit('rollDicesToStart', { roomId: id, value: dicesSum, userEmail: user.name, numberOfCells: cells.length })
+        socket.emit('rollDices', { roomId: id, value: dicesSum, userEmail: user.name, numberOfCells: cells.length })
     }
 
     const handlePosition = (i) => {
@@ -97,8 +97,11 @@ export default function Board() {
     const handleGameStateUpdate = (data) => {
         if (data.type === 'Game starting...') {
             socket.on('playersStates', (data) => {
-                setPlayers(data)
+                setPlayers(data.users)
+                setCurrentTurn(data.currentTurn)
             })
+            setDiceWinners(data.diceWinners) 
+            setCurrentTurn(data.currentTurn)
             setVisible(true)
         }
     }
@@ -127,14 +130,17 @@ export default function Board() {
 
     const handleStartGame = () => {
         socket.emit('startGame', id)
-        socket.on('orderOfTurns', data => setDiceWinners(data))
-
     }
+
+
 
     return (
         <Wrapper>
-            <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
-            {/* <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span> */}
+            {
+                diceWinners[currentTurn] && diceWinners[currentTurn] == socket.id && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
+                 
+            }
+            <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             {
                 !visible &&  userOwner?.userName === user.name &&

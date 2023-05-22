@@ -88,15 +88,17 @@ export default function Board() {
                 setUpdate(!update);
             }, 200)
         }
-        if (Number(currentCellPosition[i]) === Number(player.position)) {
-            setTimeout(() => { setButtonDisabled(false); }, 400)
+        if (Number(currentCellPosition[i]) === Number(player.position) ) {
+            
+            setTimeout(() => { setButtonDisabled(false); }, 200)
         }
     }
 
     useEffect(() => {
         players?.map((player, i) =>{
-            handlePosition(i)
+            
             handleMovePlayerStepByStep(player, i)
+            handlePosition(i)
         })
     }, [players, update]);
 

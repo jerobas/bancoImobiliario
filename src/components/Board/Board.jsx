@@ -35,11 +35,7 @@ export default function Board() {
     const [destination, setDestination] = useState(0);
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
 
-    // const [players, setPlayers] = useState({
-    //     position,
-    //     money: 0,
-    //     cards: []
-    // });
+    const [players_, setPlayers_] = useState()
 
     const getPosition = (i) => {
         if (componentsRef[i].current) {
@@ -52,17 +48,21 @@ export default function Board() {
         let d1 = Math.floor(Math.random() * 6) + 1;
         let d2 = Math.floor(Math.random() * 6) + 1;
 
-        let dices = d1 + d2;
+        let dicesSum = d1 + d2;
 
         setDices([d1, d2])
 
-        if (destination + dices >= cells.length) {
+        if (destination + dicesSum >= cells.length) {
             player.add(200)
         }
 
-        setDestination((player.position + dices) % cells.length)
+        setDestination((player.position + dicesSum) % cells.length)
         player.setPosition((player.position + 1) % cells.length)
         setButtonDisabled(true)
+        socket.emit('rollDicesToStart', {roomId: id, value: dicesSum, userEmail: user.name})
+        socket.on('playersStates', (data) => {
+            setPlayers_(data)
+        })
     }
 
     useEffect(() => {
@@ -107,11 +107,6 @@ export default function Board() {
         socket.on('returnPlayer', (data) => {
             setNumberOfPlayers(data)
         })
-
-        socket.emit('getPlayersStates', id)
-        socket.on('playersStates', (data) => {
-            console.log(data)
-        })
     }, [])
 
     const handleGameStateUpdate = (data) => {
@@ -127,10 +122,9 @@ export default function Board() {
     return (
         <>
             <button onClick={() => handleDice(players[0])} disabled={buttonDisabled}>Roll Dices</button>
-            <button onClick={() => handleDice(players[1])} disabled={buttonDisabled}>Roll Dices</button>
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
-            <span>{players[0].toString()}</span>
+            <span>{JSON.stringify(players_)}</span>
             <StartGame
                 onClick={handleStartGame}
             >

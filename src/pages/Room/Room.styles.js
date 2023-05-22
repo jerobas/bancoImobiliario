@@ -20,8 +20,8 @@ export const Styles = {
         border-radius: 8px;
         display: flex;
         flex-direction: column;
-        max-height: 7rem;
         justify-content: space-between;
+        max-height: 7rem;
         padding:0.75rem;
         width: 20rem;
 
@@ -29,8 +29,8 @@ export const Styles = {
             border-radius: 8px;
             margin-bottom: .3rem;
             max-height: 4rem;
-            padding-top: 0.35rem;
             overflow-y: scroll;
+            padding-top: 0.35rem;
 
         }
         li{

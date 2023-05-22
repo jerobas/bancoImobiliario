@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+const playerColor = {
+  0: props => props.theme.dark.green,
+  1: props => props.theme.dark.blue,
+  2: props => props.theme.dark.pink,
+  3: props => props.theme.dark.yellow
+}
+
 export const BoardContainer = styled.div`
   border: none;
   border-radius: 8px;
@@ -12,20 +19,20 @@ export const BoardContainer = styled.div`
 
 
 export const StartGame = styled.button`
-  display: flex;
   align-items: center;
-  justify-content: center;
-  border: none;
-  outline: none;
-  width: 4.5rem;
-  height: 2.5rem;
-  padding: 0.075rem;
   background-color: ${props => props.theme.dark.blue};
-  color: ${props => props.theme.colors.White_300};
-  font-weight: bold;
+  border: none;
   border-radius: 8px;
+  color: ${props => props.theme.colors.White_300};
+  display: flex;
   font-size: 1.4rem;
+  font-weight: bold;
+  height: 2.5rem;
+  justify-content: center;
   letter-spacing: 1.2px;
+  outline: none;
+  padding: 0.075rem;
+  width: 4.5rem;
 
   &:focus{
     border-color: ${props => props.theme.darkest.blue};
@@ -81,7 +88,7 @@ export const Cell = styled.div`
 `;
 
 export const Square = styled.div`
-  background-color: green;
+  background-color: ${props => playerColor[props.color](props)};
   border-radius: 50%;
   grid-column: 4;
   grid-row: 1;

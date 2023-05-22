@@ -3,11 +3,11 @@ import { BsFillChatDotsFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux';
 import { useParams  } from 'react-router-dom'
 
+import Board from '../../components/Board/Board';
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
-import Board from '../../components/Board/Board';
-import { Styles } from './Room.styles'
 import {globalTheme} from '../../styles/theme/global.theme'
+import { Styles } from './Room.styles'
 
 export default function Room() {
   const user = useSelector(state => state.auth.user.name)

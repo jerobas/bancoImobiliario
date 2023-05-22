@@ -22,6 +22,7 @@ export default function Board() {
     const [players, setPlayers] = useState([])
     const [currentCellPosition, setCurrentCellPosition] = useState([])
     const [renderedPosition, setRenderedPosition] = useState([]);
+    const [visible, setVisible] = useState(false);
 
     /*These two states are only used because objects' equality is not checked by React in the useEffect hook.*/
     const [recalculate, setRecalculate] = useState(false);
@@ -93,6 +94,7 @@ export default function Board() {
             socket.on('playersStates', (data) => {
                 setPlayers(data)
             })
+            setVisible(true)
         }
     }
 
@@ -127,51 +129,59 @@ export default function Board() {
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             <span>{JSON.stringify(players)}</span>
-            <StartGame
+            {
+                !visible &&  
+                <StartGame
                 onClick={handleStartGame}
-            >
-                Start
-            </StartGame>
+                >
+                    Start
+                </StartGame>
+            }
+          
+          {
+            visible && 
             <BoardContainer>
-                {
-                    cells.map((_, index) =>
-                    (
-                        <Cell key={`cell-${index}`}>
-                            {mapBoard(index, cells.length) + 1}
-                            {
-                                ...players?.map((player, i) => {
-                                    return (
-                                        currentCellPosition[i] === mapBoard(index, cells.length) && <div
-                                            style={{
-                                                backgroundColor: ['red', 'green', 'blue'][i],
-                                                position: 'absolute',
-                                                width: '100%',
-                                                height: '100%'
-                                            }}
-                                            ref={el => componentsRef.current[i] = el}
-                                        />
-                                    )
-                                })
-                            }
-                        </Cell>
+            {
+                cells.map((_, index) =>
+                (
+                    <Cell key={`cell-${index}`}>
+                        {mapBoard(index, cells.length) + 1}
+                        {
+                            ...players?.map((player, i) => {
+                                return (
+                                    currentCellPosition[i] === mapBoard(index, cells.length) && <div
+                                        style={{
+                                            backgroundColor: ['red', 'green', 'blue'][i],
+                                            position: 'absolute',
+                                            width: '100%',
+                                            height: '100%'
+                                        }}
+                                        ref={el => componentsRef.current[i] = el}
+                                    />
+                                )
+                            })
+                        }
+                    </Cell>
 
-                    ))
-                }
-                {players?.map((player, i) => {
-                    return (
-                        < Square
-                            key={i}
-                            position={renderedPosition[i]}
-                            color={i}
-                        />
-                    )
-                })}
-                <ImageContainer >
-                    < Cards />
-                    < Luck />
-                </ImageContainer>
+                ))
+            }
+            {players?.map((player, i) => {
+                return (
+                    < Square
+                        key={i}
+                        position={renderedPosition[i]}
+                        color={i}
+                    />
+                )
+            })}
+            <ImageContainer >
+                < Cards />
+                < Luck />
+            </ImageContainer>
 
-            </BoardContainer >
+        </BoardContainer >
+          }
+           
         </>
     );
 }

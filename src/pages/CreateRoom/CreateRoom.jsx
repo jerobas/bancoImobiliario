@@ -2,15 +2,16 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
 
+import { useNavigate } from 'react-router-dom';
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container, ErrorMessage } from './CreateRoom.styles'
-
-
 const createRoomSchema = z.object({
     name: z.string().nonempty('O nome é obrigatório!').toLowerCase().min(5, 'Precisa ter no mínimo 5 letras!'),
     password: z.string()
@@ -26,7 +27,9 @@ const CustomColumn = ({ children }) => <Column style={{
 export default function CreateRom({
     handleClose, isOpen
 }) {
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const user = useSelector(state => state.auth.user);
     const {
         register,
         handleSubmit,
@@ -39,11 +42,25 @@ export default function CreateRom({
 
     const handleCreateRoom = (data) => {
         if (data.name) {
-            socket.emit('createRoom', data.name, data.password)
+            socket.emit('createRoom', {roomName: data.name, password:data.password, owner:user.name})
+            socket.on('roomId', roomId => {
+                socket.emit('joinRoom', {
+                    roomId: roomId,
+                    password: data.password,
+                    userEmail: user.name
+                })
+                socket.emit('getRooms');
+                socket.on('updateRooms', (data) => {
+                    dispatch({
+                        type: 'ROOMS',
+                        payload: data
+                    })
+                })
+                navigate(`/room/${roomId}`)
+            })
             handleClose()
         }
     }
-
 
     return (
         <Modal

@@ -15,7 +15,7 @@ export const Styles = {
         width: 100%;
     `,
     ChatContainer: styled.div`
-        background: ${props => props.theme.light.black};
+        background: ${props => props.theme.lightest.blue};
         border: none;
         border-radius: 8px;
         display: flex;
@@ -62,7 +62,8 @@ export const Styles = {
             width: 100%;
 
             &:focus-within{
-                
+                border: 0.01rem solid;
+                border-color:  ${props => props.theme.light.blue};
             }
 
         }

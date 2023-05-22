@@ -7,6 +7,37 @@ const playerColor = {
   3: props => props.theme.dark.yellow
 }
 
+export const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem;
+  align-items: center;
+  justify-content: center;
+
+  button{
+    width: 8rem;
+    border: none;
+    border-radius: 8px;
+    height: 2rem;
+    background-color: green;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1.2px;
+    font-size: 1rem;
+  }
+  
+` 
+
+export const GameLayout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+`
+
 export const BoardContainer = styled.div`
   border: none;
   border-radius: 8px;
@@ -17,6 +48,13 @@ export const BoardContainer = styled.div`
   max-width: 880px;
 `;
 
+export const PlayersContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+` 
 
 export const StartGame = styled.button`
   align-items: center;

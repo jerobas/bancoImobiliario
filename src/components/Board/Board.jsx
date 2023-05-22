@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, StartGame, Square } from './Board.styles'
+import { BoardContainer, Cell, Cards, ImageContainer, Luck, StartGame, Square, Wrapper, GameLayout, PlayersContainer} from './Board.styles'
 
 import { socket } from '../../services/Auth'
 
 import { arrayFromLength, mapBoard } from '../../utils'
+
+import { FaCrown} from 'react-icons/fa'
 
 export default function Board() {
     const { id } = useParams()
@@ -23,6 +25,9 @@ export default function Board() {
     const [currentCellPosition, setCurrentCellPosition] = useState([])
     const [renderedPosition, setRenderedPosition] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [userOwner, setUserOwner] = useState()
+    const [diceWinners, setDiceWinners] = useState();
+    const [turn, setTurn] = useState()
 
     /*These two states are only used because objects' equality is not checked by React in the useEffect hook.*/
     const [recalculate, setRecalculate] = useState(false);
@@ -99,10 +104,12 @@ export default function Board() {
     }
 
     useEffect(() => {
-        console.log('how many times getPlayers is called')
+        socket.emit('getOwner', id)
+        socket.on('returnOwner', data => {
+            setUserOwner(data)
+        })
         socket.emit('getPlayers', id)
         socket.on('returnPlayer', (data) => {
-            console.log('how many times returnPlayer is called')
             setNumberOfPlayers(data)
             const aux = arrayFromLength(data)
             setRenderedPosition(aux.map(() => {
@@ -120,24 +127,36 @@ export default function Board() {
 
     const handleStartGame = () => {
         socket.emit('startGame', id)
+        socket.on('orderOfTurns', data => setDiceWinners(data))
 
     }
 
     return (
-        <>
-            <button onClick={() => handleDice()} disabled={buttonDisabled}>Roll Dices</button>
-            <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
+        <Wrapper>
+            <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
+            {/* <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span> */}
             <br />
-            <span>{JSON.stringify(players)}</span>
             {
-                !visible &&  
+                !visible &&  userOwner?.userName === user.name &&
                 <StartGame
                 onClick={handleStartGame}
                 >
                     Start
                 </StartGame>
             }
-          
+          <GameLayout>
+            <PlayersContainer>
+                {
+                    players && players.map((player, i) => {
+                        return(
+                            <div key={i} style={{display: 'flex', flexDirection: 'column'}}>
+                                <span>{player.userEmail} {player.socketId === userOwner.socketId && < FaCrown />}</span>
+                                <span>Dinheiro: R${player.money}</span>
+                            </div>
+                        )
+                    })
+                }
+            </PlayersContainer>
           {
             visible && 
             <BoardContainer>
@@ -151,7 +170,6 @@ export default function Board() {
                                 return (
                                     currentCellPosition[i] === mapBoard(index, cells.length) && <div
                                         style={{
-                                            backgroundColor: ['red', 'green', 'blue'][i],
                                             position: 'absolute',
                                             width: '100%',
                                             height: '100%'
@@ -181,7 +199,10 @@ export default function Board() {
 
         </BoardContainer >
           }
-           
-        </>
+           <PlayersContainer>
+
+            </PlayersContainer>
+          </GameLayout>
+        </Wrapper>
     );
 }

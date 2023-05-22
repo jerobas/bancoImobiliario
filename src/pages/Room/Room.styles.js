@@ -78,6 +78,9 @@ export const Styles = {
         }
     `,
     GameArea: styled.div`
+        display: flex;
+        width: 1200px;
+        height: 100%;
         align-items: center;
         justify-content: center;
     

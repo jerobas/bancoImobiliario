@@ -48,15 +48,20 @@ export default function CreateRom({
                     roomId: roomId,
                     password: data.password,
                     userEmail: user.name
+                })     
+                socket.on('joined', flag => {
+                    if(flag){
+                         socket.emit('getRooms');
+                        socket.on('updateRooms', (data) => {
+                            dispatch({
+                                type: 'ROOMS',
+                                payload: data
+                            })
+                        })
+                        navigate(`/room/${roomId}`)       
+                    }
                 })
-                socket.emit('getRooms');
-                socket.on('updateRooms', (data) => {
-                    dispatch({
-                        type: 'ROOMS',
-                        payload: data
-                    })
-                })
-                navigate(`/room/${roomId}`)
+                    
             })
             handleClose()
         }

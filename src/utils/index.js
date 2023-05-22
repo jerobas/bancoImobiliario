@@ -1,3 +1,7 @@
-import mapBoard from './mapBoard';
+import arrayFromLength from './functions/arrayFromLength';
+import mapBoard from './functions/mapBoard';
 
-export { mapBoard };
+export {
+    arrayFromLength,
+    mapBoard
+};

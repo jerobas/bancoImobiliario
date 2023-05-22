@@ -60,9 +60,7 @@ export default function Board() {
         player.setPosition((player.position + 1) % cells.length)
         setButtonDisabled(true)
         socket.emit('rollDicesToStart', {roomId: id, value: dicesSum, userEmail: user.name})
-        socket.on('playersStates', (data) => {
-            setPlayers_(data)
-        })
+       
     }
 
     useEffect(() => {
@@ -110,8 +108,12 @@ export default function Board() {
     }, [])
 
     const handleGameStateUpdate = (data) => {
-        console.log('recieved game update')
-        console.log(data)
+        if(data.type === 'Game starting...')
+        {
+            socket.on('playersStates', (data) => {
+                setPlayers_(data)
+            })
+        }
     }
 
     const handleStartGame = () => {

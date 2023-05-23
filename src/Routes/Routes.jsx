@@ -40,7 +40,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     );
 }
 
-export default function Routes() {
+export default function RoutesPage() {
     return (
         <Router>
             <Switch>

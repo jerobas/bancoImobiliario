@@ -8,38 +8,38 @@ const playerColor = {
 }
 
 export const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  padding: 1.2rem;
-  align-items: center;
+  height: 100%;
   justify-content: center;
+  padding: 1.2rem;
+  width: 100%;
 
   >div{
     min-height: 2rem;
   }
 
   button{
-    width: 8rem;
+    background-color: green;
     border: none;
     border-radius: 8px;
-    height: 2rem;
-    background-color: green;
-    font-weight: bold;
     color: white;
-    letter-spacing: 1.2px;
     font-size: 1rem;
+    font-weight: bold;
+    height: 2rem;
+    letter-spacing: 1.2px;
+    width: 8rem;
   }
 
 ` 
 
 export const GameLayout = styled.div`
-  width: 100%;
-  height: 100%;
+  align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
+  height: 100%;
+  width: 100%;
 `
 
 export const BoardContainer = styled.div`
@@ -53,9 +53,9 @@ export const BoardContainer = styled.div`
 `;
 
 export const PlayersContainer = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
   justify-content: space-between;
 
 ` 

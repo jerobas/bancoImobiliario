@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { BsFillChatDotsFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux';
 import { useParams  } from 'react-router-dom'

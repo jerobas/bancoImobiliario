@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +10,6 @@ import { z } from 'zod'
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
-import { useSelector, useDispatch } from 'react-redux';
 import { Container, ErrorMessage } from './CreateRoom.styles'
 const createRoomSchema = z.object({
     name: z.string().nonempty('O nome é obrigatório!').toLowerCase().min(1, 'Precisa ter no mínimo 1 letra!').max(15, 'Pode ter no máximo 15 letras!'),

@@ -78,11 +78,11 @@ export const Styles = {
         }
     `,
     GameArea: styled.div`
-        display: flex;
-        width: 1200px;
-        height: 100%;
         align-items: center;
+        display: flex;
+        height: 100%;
         justify-content: center;
+        width: 1200px;
     
     `
 

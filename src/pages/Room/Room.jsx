@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { BsFillChatDotsFill } from 'react-icons/bs'
-import { useSelector } from 'react-redux';
 import { useParams  } from 'react-router-dom'
+
+import {getUserFromLocalStorage} from '../../services/Auth'
 
 import Board from '../../components/Board/Board';
 import Layout from '../../components/Layout/Layout';
@@ -10,7 +11,7 @@ import {globalTheme} from '../../styles/theme/global.theme'
 import { Styles } from './Room.styles'
 
 export default function Room() {
-  const user = useSelector(state => state.auth.user.name)
+  const user = getUserFromLocalStorage()
   const { id } = useParams()
 
   const messagesRef = useRef(null);

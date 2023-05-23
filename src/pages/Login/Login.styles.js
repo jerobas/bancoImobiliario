@@ -20,6 +20,29 @@ export const Styles = {
     flex-direction: column;
     gap: 2;
     max-width: 0 1200px;
+
+    form{
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+
+      input{
+        background-color: ${props => props.theme.colors.White_400};
+    border: none;
+    border-radius: 8px;
+    height: 1.75rem;
+    outline: solid;
+    outline-color: ${props => props.theme.dark.blue};
+    outline-width: 0.1rem;
+    padding: 0 1rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    &::placeholder{
+      color: black;
+      opacity: 0.2
+    }
+      }
+    }
   `,
   TypingText: styled.span`
     color: ${props => props.theme.colors.White};

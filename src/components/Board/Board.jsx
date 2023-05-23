@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
-
+import { getUserFromLocalStorage } from '../../services/Auth';
 import { BoardContainer, Cell, Cards, ImageContainer, Luck, StartGame, Square, Wrapper, GameLayout, PlayersContainer} from './Board.styles'
 
 import { socket } from '../../services/Auth'
@@ -13,7 +12,7 @@ import { FaCrown} from 'react-icons/fa'
 
 export default function Board() {
     const { id } = useParams()
-    const user = useSelector(state => state.auth.user);
+    const user = getUserFromLocalStorage()
 
     const cells = Array.from(Array(40)).map((_) => 1);
     const [dices, setDices] = useState([0, 0]);
@@ -51,7 +50,7 @@ export default function Board() {
 
         setDices([d1, d2])
         setButtonDisabled(true)
-        socket.emit('rollDices', { roomId: id, value: dicesSum, userEmail: user.name, numberOfCells: cells.length })
+        socket.emit('rollDices', { roomId: id, value: dicesSum, userEmail: user, numberOfCells: cells.length })
     }
 
     const handlePosition = (i) => {
@@ -146,7 +145,7 @@ export default function Board() {
             <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             {
-                !visible &&  userOwner?.userName === user.name &&
+                !visible &&  userOwner?.userName === user &&
                 <StartGame
                 onClick={handleStartGame}
                 >

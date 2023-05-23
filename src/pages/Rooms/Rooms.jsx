@@ -9,14 +9,14 @@ import { socket } from '../../services/Auth';
 import CreateRoom from '../CreateRoom/CreateRoom';
 import JoinRoom from '../JoinRoom/JoinRoom';
 import { Row, Column, RoomsContainer, RoomsPage, Button, RoomStyle } from './Rooms.styles';
-
+import {getUserFromLocalStorage} from '../../services/Auth'
 
 export default function Rooms() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
     const salas = useSelector(state => state.room)
-    const user = useSelector(state => state.auth)
+    const user = getUserFromLocalStorage()
 
     const [searchInput, setSearchInput] = useState('')
     const [debouncedSearchInput, setDebouncedSearchInput] = useState('')
@@ -32,10 +32,6 @@ export default function Rooms() {
 
     const Room = ({ children, selected, onClick }) => <RoomStyle onClick={onClick} style={{ backgroundColor: selected ? '#FFFFFF20' : 'transparent' }}>{children}</RoomStyle>
 
-    useEffect(() => {
-        console.log('d')
-    },[true])
-
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
             setJoinIsVisible(true)
@@ -50,7 +46,7 @@ export default function Rooms() {
             socket.emit('joinRoom', {
                 roomId: room.name,
                 password: '',
-                userEmail: user.user.name
+                userEmail: user
             })
             socket.on('joined', data => {
                 if (data) {

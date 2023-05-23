@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { ThemeProvider } from 'styled-components'
 
 import store from './pages/Redux'
-import RoutesPage from './routes/Routes.jsx';
+import RoutesPage from './routes/index.jsx';
 import GlobalStyles from './styles/global.styles';
 import { globalTheme } from './styles/theme/global.theme';
 

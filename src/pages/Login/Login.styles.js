@@ -1,15 +1,13 @@
 import { motion } from 'framer-motion';
 import styled from "styled-components";
 
-import background from '../../assets/temporaryWallpaper.webp';
-
 export const Styles = {
   Container: styled.div`
     align-items: center;
-    background-image: url(${background});
-    background-size: cover;
     display: flex;
     height: 100%;
+    width: 100%;
+    padding: 1rem;
     justify-content: center;
     justify-self: center;
     
@@ -20,16 +18,44 @@ export const Styles = {
     flex-direction: column;
     gap: 2;
     max-width: 0 1200px;
+
+    form{
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+
+      input{
+        background-color: ${props => props.theme.colors.White_400};
+        border: none;
+        border-radius: 8px;
+        height: 1.75rem;
+        outline: solid;
+        outline-color: ${props => props.theme.dark.blue};
+        outline-width: 0.1rem;
+        padding: 0 .8rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+
+        &::placeholder{
+          color: black;
+          opacity: 0.2
+        }
+      }
+    }
   `,
   TypingText: styled.span`
     color: ${props => props.theme.colors.White};
     cursor: default;
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
     letter-spacing: 0.075rem;
     margin: 2rem;
-    white-space: nowrap;
+    @media (max-width: 768px) {
+      line-height: 2rem;
+    }
   `,
    Line: styled.div`
     background-color:  ${props => props.theme.colors.White};;
@@ -39,6 +65,9 @@ export const Styles = {
     margin-top: 0.17rem;
     transition: width 1s ease-in-out;
     width: ${props  => props.progress}%;
+    @media (max-width: 768px) {
+        display: none;
+    }
   `,
   StyledButton: styled(motion.button)`
     background-color: #007bff;

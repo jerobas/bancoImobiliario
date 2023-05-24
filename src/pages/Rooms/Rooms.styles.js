@@ -4,32 +4,37 @@ export const Column = styled.div`
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 100%;
     justify-content: center;
+    label{
+        color: ${props => props.theme.dark.blue};
+    }
+    @media (max-width: 768px) {
+      line-height: 2rem;
+      font-size: 1.15rem;
+    }
 `;
 
 export const Row = styled.div`
-    align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    width: 100%;
+    align-items: center;
 `;
 
 export const RoomsContainer = styled(Column)`
-    border: 3px solid #FFFFFF;
-    border-radius: 10px;
-    height: min-content;
-    min-width: 400px;
-    padding: 20px;
-
+    min-height: 10rem;
+    div{
+        width: 100%;
+    }
+    h2{
+        text-align: center;
+    }
     input{
         border: none;
         border-radius: 8px;
         height: 2rem;
         outline: none;
-        padding: 0 .5rem;
         width: 100%;
+        padding: 0 .5rem;
     }
 `;
 
@@ -59,28 +64,23 @@ export const Button = styled.button`
 `;
 
 export const RoomsPage = styled(Column)`
-    background-size: cover;
     color: #FFFFFF;
-    gap: 20px;
-    height: 100%;
-
+    padding: 2rem;
     justify-content: start;
-
+    height: 80%;
     h1, h2 {	
         color: #FFFFFF;
     }
 
     h1 {
-        font-size: 40px;
+        font-size: 3rem;
     }
-
-    vertical-align: middle;
-
-    width: 100%;
+    
 `;
 
 export const RoomStyle = styled(Row)`
     cursor: pointer;
     justify-content: space-between;
     padding: 10px;
+    
 `;

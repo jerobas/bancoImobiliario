@@ -1,29 +1,19 @@
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/user';
+import { LOGIN_SUCCESS  } from '../actions/user';
+import {saveUserInStorage} from '../../../services/Auth'
 
 const initialState = {
     isAuthenticatedLocal: false,
-    user: null
+    user: ''
 }
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
       case LOGIN_SUCCESS:
+        saveUserInStorage(action.payload)
         return {
           ...state,
           isAuthenticatedLocal: true,
           user: action.payload
-        };
-      case LOGIN_FAILURE:
-        return {
-          ...state,
-          isAuthenticatedLocal: false,
-          user: null
-        };
-      case LOGOUT:
-        return {
-          ...state,
-          isAuthenticatedLocal: false,
-          user: null
         };
       default:
         return state;

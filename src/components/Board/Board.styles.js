@@ -105,8 +105,7 @@ export const Luck = styled.div`
 `
 
 export const ImageContainer = styled.div`
-  background-color: red;
-  border-radius: 8px;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   grid-column: 2 / span 9;

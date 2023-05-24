@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import {getUserFromLocalStorage} from '../../services/Auth'
+
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
@@ -28,7 +30,7 @@ export default function CreateRom({
 }) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const user = useSelector(state => state.auth.user);
+    const user = getUserFromLocalStorage()
     const {
         register,
         handleSubmit,
@@ -41,12 +43,12 @@ export default function CreateRom({
 
     const handleCreateRoom = (data) => {
         if (data.name) {
-            socket.emit('createRoom', {roomName: data.name, password:data.password, owner:user.name})
+            socket.emit('createRoom', {roomName: data.name, password:data.password, owner:user})
             socket.on('roomId', roomId => {
                 socket.emit('joinRoom', {
                     roomId: roomId,
                     password: data.password,
-                    userEmail: user.name
+                    userEmail: user
                 })     
                 socket.on('joined', flag => {
                     if(flag){

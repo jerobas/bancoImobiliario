@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import {getUserFromLocalStorage} from '../../services/Auth'
+
 import Modal from '../../components/Modal/Modal';
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
@@ -27,7 +29,7 @@ export default function JoinRoom({
     handleClose, isOpen, roomName, roomId
 }) {
 
-    const user = useSelector(state => state.auth)
+    const user = getUserFromLocalStorage()
 
     const {
         register,
@@ -45,7 +47,7 @@ export default function JoinRoom({
             socket.emit('joinRoom', {
                 roomId: roomId,
                 password: data.password,
-                userEmail: user.user.name
+                userEmail: user
             })
             handleClose()
         }
@@ -66,7 +68,7 @@ export default function JoinRoom({
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    boder: 'none'
+
                 }}>
                     <div style={{
                         height: '36px',

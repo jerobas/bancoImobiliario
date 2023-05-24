@@ -68,7 +68,7 @@ export default function JoinRoom({
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    boder: 'none'
+
                 }}>
                     <div style={{
                         height: '36px',

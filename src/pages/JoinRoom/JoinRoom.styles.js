@@ -11,7 +11,6 @@ export const Container = styled.div`
 
   header {
     border: none;
-    border-bottom: 1px solid #d2d2d2;
     display: flex;
     justify-content: center;
     width: 100%;

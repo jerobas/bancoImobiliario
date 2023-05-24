@@ -18,7 +18,6 @@ const userSchema = z.object({
 export default function Login() {
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const [text, setText] = useState('');
   const [progress, setProgress] = useState(0);
   const originalText = 'Um jogo de tabuleiro diferente de todos os outros!';
@@ -72,8 +71,6 @@ export default function Login() {
     <Layout>
       <Styles.Container>
         <Styles.Content>
-
-
           <Styles.TypingText>
             {text}
             <Styles.Line progress={progress} />

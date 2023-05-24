@@ -1,28 +1,22 @@
 import styled from 'styled-components'
+import background from '../../assets/temporaryWallpaper.webp';
 
 export const Styles = {
     Container: styled.main`
-        //overflow-y: auto;
-        //padding: 30px;
-        background-color: #f5f5f5;
+        background-image: url(${background});
+        background-size: cover;
         display: flex;
-        flex-flow: column nowrap;
-        height: 100%;
-        overflow-x: hidden;
-        width: 100%;
-        @media (max-width: 768px) {
-            padding: 50px 30px;
-        }
-    `,
-    Content: styled.div`
-        display: flex;
-        flex-direction: column;
         height: 100vh;
-        width: 100%;
+        overflow: hidden;
+        width: 100vw;
+        align-items: center;
+        justify-content: center;
     `,
     Section: styled.section`
         display: flex;
-        flex-flow: column nowrap;
-        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
     `
 }

@@ -29,6 +29,7 @@ export default function Rooms() {
         password: '',
         hasPasswod: false,
     })
+    const [loading, setLoading] = useState(false)
 
     const Room = ({ children, selected, onClick }) => <RoomStyle onClick={onClick} style={{ backgroundColor: selected ? '#FFFFFF20' : 'transparent' }}>{children}</RoomStyle>
 
@@ -67,19 +68,26 @@ export default function Rooms() {
     }
 
     useEffect(() => {
-        socket.emit('getRooms');
-        socket.on('updateRooms', (data) => {
-            dispatch({
-                type: 'ROOMS',
-                payload: data
+        setLoading(true)
+        try {
+            setSearchInput('');
+            socket.emit('getRooms');
+            socket.on('updateRooms', (data) => {
+            if(data && data.hasRooms){
+                dispatch({
+                    type: 'ROOMS',
+                    payload: data
+                })
+            }
+                
             })
-        })
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoading(false)
+        }
+        
     }, [])
-
-    useEffect(() => {
-        setSearchInput('');
-    }, []);
-
 
     useEffect(() => {
         if (debouncedSearchInput.length === 0) {
@@ -114,42 +122,59 @@ export default function Rooms() {
         setDebouncedSearchInput(inputVal)
     }, 300)
 
+
     return (
         <Layout>
-            <RoomsPage style={{ backgroundImage: `url(${background})` }}>
-                <RoomsPage style={{ backgroundColor: `#030b13AA`, padding: '40px' }}>
+            {
+                !loading && (
+                    <RoomsPage>
                     <RoomsContainer>
-                        <h2>Número de Salas: {salas.numberOfRooms}</h2>
-                        <Column style={{ width: '100%', padding: '10px' }}>
-                            <input
-                                placeholder='Buscar sala...'
-                                onChange={handleSearchInputChange}
-                                value={searchInput}
-                            />
-                        </Column>
+                        <div>
+                            <h2>Número de Salas: {salas.numberOfRooms ? salas.numberOfRooms : 0}</h2>
+                            <Column 
+                                    style={{ width: '100%', padding: '10px' }}
+                                >
+                                <input
+                                    placeholder='Buscar sala...'
+                                    onChange={handleSearchInputChange}
+                                    value={searchInput}
+                                />
+                            </Column>
+                        </div>
+                        <div style={{minHeight: '3rem'}}>
                         {
-
-                            salas && salas.rooms?.map((sala, index) =>
-                                <Room selected={index === selectedRoom} onClick={() => {
-                                    setSelectedRoom(index)
-                                    setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2], nameShown: sala[0] })
-                                    setFull(sala[3])
-                                }} key={index}>
-                                    <Row style={{ width: "max-content", gap: '5px' }}>
+                            salas.hasRooms && salas.rooms?.map((sala, index) =>
+                                    <Room 
+                                    style={{backgroundColor: 'red'}}
+                                    selected={index === selectedRoom} 
+                                    onClick={() => {
+                                        setSelectedRoom(index)
+                                        setRoom({ ...setRoom, name: sala[1], hasPasswod: sala[2], nameShown: sala[0] })
+                                        setFull(sala[3])
+                                    }} 
+                                    key={index}
+                                >
+                                    <Row 
+                                        style={{ width: "max-content", gap: '.3rem' }}
+                                    >
                                         <p>{index + 1} - {sala[0]}</p>
                                         {sala[2] ? <FaLock /> : null}
                                     </Row>
-                                    <p style={{ color: sala[3] ? 'red' : 'green' }}>{sala[4]}/4</p>
-                                </Room>)
+                                    <p 
+                                        style={{ color: sala[3] ? 'red' : 'green', marginLeft: '.5rem' }}
+                                    >
+                                        {sala[4]}/4
+                                    </p>
+                                </Room>
+                            )
                         }
+                         </div>   
                     </RoomsContainer>
                     <Row style={{ gap: '20px' }}>
                         <CreateRoomButton />
                         <JoinRoomButton />
                     </Row>
-                </RoomsPage>
-            </RoomsPage>
-            <CreateRoom
+                    <CreateRoom
                 isOpen={isVisible}
                 handleClose={handleModalClose}
             />
@@ -159,6 +184,10 @@ export default function Rooms() {
                 roomName={room.nameShown}
                 roomId={room.name}
             />
+            </RoomsPage>
+                )
+                           
+            }
         </Layout >
     )
 }

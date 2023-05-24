@@ -5,8 +5,9 @@ export const Styles = {
         align-items: center;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: 80%;
         justify-content: space-around;
+        width: 90%;
     `,
     ChatArea: styled.div`
         align-items: center;

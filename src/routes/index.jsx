@@ -18,10 +18,13 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
     useEffect(() => {
         socket.emit('getRooms');
         socket.on('updateRooms', (data) => {
-            dispatch({
-                type: 'ROOMS',
-                payload: data
-            })
+            if(data && data.numberOfRooms > 0){
+                dispatch({
+                    type: 'ROOMS',
+                    payload: data
+                })
+            }
+            
         })
     }, [])
 

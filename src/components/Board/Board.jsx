@@ -138,11 +138,8 @@ export default function Board() {
             <div>
             {
                 diceWinners[currentTurn] && diceWinners[currentTurn] == socket.id && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
-                 
             }
             </div>
-          
-            <span>{`${dices[0]} + ${dices[1]} = ${dices[0] + dices[1]}`}</span>
             <br />
             {
                 !visible &&  userOwner?.userName === user &&
@@ -201,8 +198,6 @@ export default function Board() {
                 )
             })}
             <ImageContainer >
-                < Cards />
-                < Luck />
             </ImageContainer>
 
         </BoardContainer >

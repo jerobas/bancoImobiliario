@@ -17,10 +17,12 @@ export const Container = styled.div`
     width: 100%;
   }
 
-  h1{
+  *{
+    h1{
     color: ${props => props.theme.dark.blue};
     font-size: 2rem;
     font-weight: bold;
+  }
   }
 
   main {

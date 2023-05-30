@@ -49,8 +49,13 @@ export const Styles = {
         }
         #icon{
             margin-left: 0.42rem;
-            margin-right: .3rem;
+            margin-right: .4rem;
             opacity: .2;
+        }
+        #iconSend{
+            opacity: .2;
+            cursor: pointer;
+            margin-right: .6rem;
         }
         > div{
             align-items: center;

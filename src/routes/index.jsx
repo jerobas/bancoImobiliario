@@ -16,7 +16,7 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        socket.emit('getRooms');
+        socket.emit('rooms:getAll');
         socket.on('updateRooms', (data) => {
             if(data && data.numberOfRooms > 0){
                 dispatch({

@@ -43,16 +43,16 @@ export default function CreateRom({
 
     const handleCreateRoom = (data) => {
         if (data.name) {
-            socket.emit('createRoom', {roomName: data.name, password:data.password, owner:user})
+            socket.emit('rooms:create', {roomName: data.name, password:data.password, owner:user})
             socket.on('roomId', roomId => {
-                socket.emit('joinRoom', {
+                socket.emit('rooms:join', {
                     roomId: roomId,
                     password: data.password,
                     userEmail: user
                 })     
                 socket.on('joined', flag => {
                     if(flag){
-                         socket.emit('getRooms');
+                        socket.emit('rooms:getAll');
                         socket.on('updateRooms', (data) => {
                             dispatch({
                                 type: 'ROOMS',

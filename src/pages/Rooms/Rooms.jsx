@@ -3,7 +3,6 @@ import { FaLock } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
-import background from '../../assets/temporaryWallpaper.webp';
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
 import CreateRoom from '../CreateRoom/CreateRoom';
@@ -13,9 +12,9 @@ import {getUserFromLocalStorage} from '../../services/Auth'
 
 export default function Rooms() {
     const navigate = useNavigate();
-    const dispatch = useDispatch()
-
+    const dispatch = useDispatch();
     const salas = useSelector(state => state.room)
+    
     const user = getUserFromLocalStorage()
 
     const [searchInput, setSearchInput] = useState('')
@@ -33,18 +32,21 @@ export default function Rooms() {
 
     const Room = ({ children, selected, onClick }) => <RoomStyle onClick={onClick} style={{ backgroundColor: selected ? '#FFFFFF20' : 'transparent' }}>{children}</RoomStyle>
 
+
+    
+
     const handleJoinRoom = () => {
         if (room.hasPasswod) {
             setJoinIsVisible(true)
             socket.on('joined', data => {
                 if (data) {
                     navigate(`/room/${room.name}`)
-                    socket.emit('getRooms');
+                    socket.emit('rooms:getAll');
                 }
             })
         }
         else {
-            socket.emit('joinRoom', {
+            socket.emit('rooms:join', {
                 roomId: room.name,
                 password: '',
                 userEmail: user
@@ -52,7 +54,7 @@ export default function Rooms() {
             socket.on('joined', data => {
                 if (data) {
                     navigate(`/room/${room.name}`)
-                    socket.emit('getRooms');
+                    socket.emit('rooms:getAll');
                 }
             })
         }
@@ -71,7 +73,7 @@ export default function Rooms() {
         setLoading(true)
         try {
             setSearchInput('');
-            socket.emit('getRooms');
+            socket.emit('rooms:getAll');
             socket.on('updateRooms', (data) => {
             if(data && data.hasRooms){
                 dispatch({

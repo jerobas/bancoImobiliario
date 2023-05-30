@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
-import { BsFillChatDotsFill } from 'react-icons/bs'
+import { BsFillChatDotsFill, BsFillSendFill } from 'react-icons/bs'
 import { useParams  } from 'react-router-dom'
-
 import {getUserFromLocalStorage} from '../../services/Auth'
+import {useDispatch }from 'react-redux'
 
 import Board from '../../components/Board/Board';
 import Layout from '../../components/Layout/Layout';
@@ -13,7 +13,7 @@ import { Styles } from './Room.styles'
 export default function Room() {
   const user = getUserFromLocalStorage()
   const { id } = useParams()
-
+  const dispatch = useDispatch();
   const messagesRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -27,6 +27,23 @@ export default function Room() {
     };
   }, []);
 
+  let popstateCounter = 0;
+
+window.addEventListener('popstate', () => {
+  if (popstateCounter === 0) {
+    popstateCounter++;
+    socket.emit('removePlayer');
+    socket.on('updateRooms', (data) => {
+      if (data && data.numberOfRooms > 0) {
+        dispatch({
+          type: 'ROOMS',
+          payload: data,
+        });
+      }
+    });
+  }
+});
+
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -34,15 +51,18 @@ export default function Room() {
   }, [messages]);
 
   const handleSendMessage = () => {
-    socket.emit('sendMessage', id, message, user);
-    setMessage('');
+    if(message.length > 0)
+      socket.emit('rooms:chat', id, message, user);
+      setMessage('');
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && message.length > 0) {
+    if (event.key === 'Enter') {
       handleSendMessage();
     }
   };
+
+ 
 
   return (
     <Layout>
@@ -75,6 +95,7 @@ export default function Room() {
                 onKeyDown={handleKeyDown}
                 placeholder='Chat...'
               />
+              <BsFillSendFill id="iconSend" onClick={() => handleSendMessage()}/>
             </div>
           </Styles.ChatContainer>
         </Styles.ChatArea>

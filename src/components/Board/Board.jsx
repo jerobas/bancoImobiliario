@@ -28,12 +28,10 @@ export default function Board() {
     const [diceWinners, setDiceWinners] = useState([]);
     const [currentTurn, setCurrentTurn] = useState(0)
 
-    /*These two states are only used because objects' equality is not checked by React in the useEffect hook.*/
     const [recalculate, setRecalculate] = useState(false);
     const recalculatePosition = () => setRecalculate(!recalculate);
     const [restart, setRestart] = useState(false);
     const cleanRestart = () => setRestart(!restart);
-    /*This could probably be the future case of some performance issues, but for now it should be fine.*/
 
     const getPosition = (i) => {
         if (componentsRef.current[i]) {
@@ -188,7 +186,7 @@ export default function Board() {
 
                 ))
             }
-            {players?.map((player, i) => {
+            {players?.map((_, i) => {
                 return (
                     < Square
                         key={i}
@@ -197,8 +195,7 @@ export default function Board() {
                     />
                 )
             })}
-            <ImageContainer >
-            </ImageContainer>
+            <ImageContainer />
 
         </BoardContainer >
           }

@@ -44,7 +44,7 @@ export default function JoinRoom({
 
     const handleJoinRoom = (data) => {
         if (data.password) {
-            socket.emit('joinRoom', {
+            socket.emit('rooms:join', {
                 roomId: roomId,
                 password: data.password,
                 userEmail: user

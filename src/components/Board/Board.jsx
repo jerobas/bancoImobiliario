@@ -43,12 +43,13 @@ export default function Board() {
     const handleDice = () => {
         let d1 = Math.floor(Math.random() * 6) + 1;
         let d2 = Math.floor(Math.random() * 6) + 1;
-
-        let dicesSum = d1 + d2;       
-
+   
         setDices([d1, d2])
         setButtonDisabled(true)
-        socket.emit('rollDices', { roomId: id, value: dicesSum, userEmail: user, numberOfCells: cells.length })
+        socket.emit('rooms:rollDices', { roomId: id, value: {
+            d1: d1,
+            d2: d2
+        }, userEmail: user, numberOfCells: cells.length })
     }
 
     const handlePosition = (i) => {
@@ -104,14 +105,14 @@ export default function Board() {
     }
 
     useEffect(() => {
-        socket.emit('getOwner', id)
+        socket.emit('rooms:getOwner', id)
         socket.on('returnOwner', data => {
             setUserOwner(data)
         })
-        socket.emit('getPlayers', id)
+        socket.emit('rooms:getUsers', id)
         socket.on('returnPlayer', (data) => {
-            setNumberOfPlayers(data)
-            const aux = arrayFromLength(data)
+            setNumberOfPlayers(data.length)
+            const aux = arrayFromLength(data.length)
             setRenderedPosition(aux.map(() => {
                 return {
                     x: 0,
@@ -126,21 +127,22 @@ export default function Board() {
     }, [])
 
     const handleStartGame = () => {
-        socket.emit('startGame', id)
+        socket.emit('rooms:start', id)
     }
-
-
 
     return (
         <Wrapper>
             <div>
             {
-                diceWinners[currentTurn] && diceWinners[currentTurn] == socket.id && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
+                diceWinners[currentTurn] && diceWinners[currentTurn] == socket._opts.hostname && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
             }
+            </div>
+            <div style={{background: 'white'}}>
+                <span>Dados: {dices[0]} + {dices[1]}</span>
             </div>
             <br />
             {
-                !visible &&  userOwner?.userName === user &&
+                !visible &&  userOwner === socket._opts.hostname &&
                 <StartGame
                 onClick={handleStartGame}
                 >
@@ -152,8 +154,8 @@ export default function Board() {
                 {
                     players && players.map((player, i) => {
                         return(
-                            <div key={i} style={{display: 'flex', flexDirection: 'column'}}>
-                                <span>{player.userEmail} {player.socketId === userOwner.socketId && < FaCrown />}</span>
+                            <div key={i} style={{display: 'flex', flexDirection: 'column', background: 'white'}}>
+                                <span>{player.userName} {player.userIP ===  socket._opts.hostname && < FaCrown />}</span>
                                 <span>Dinheiro: R${player.money}</span>
                             </div>
                         )
@@ -169,7 +171,7 @@ export default function Board() {
                     <Cell key={`cell-${index}`}>
                         {mapBoard(index, cells.length) + 1}
                         {
-                            ...players?.map((player, i) => {
+                            ...players?.map((_, i) => {
                                 return (
                                     currentCellPosition[i] === mapBoard(index, cells.length) && <div
                                         style={{

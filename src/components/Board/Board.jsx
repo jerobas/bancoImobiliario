@@ -154,7 +154,7 @@ export default function Board() {
                 {
                     players && players.map((player, i) => {
                         return(
-                            <div key={i} style={{display: 'flex', flexDirection: 'column', background: 'white'}}>
+                            <div key={player._id} style={{display: 'flex', flexDirection: 'column', background: 'white'}}>
                                 <span>{player.userName} {player.userIP ===  socket._opts.hostname && < FaCrown />}</span>
                                 <span>Dinheiro: R${player.money}</span>
                             </div>
@@ -188,10 +188,10 @@ export default function Board() {
 
                 ))
             }
-            {players?.map((_, i) => {
+            {players?.map((player, i) => {
                 return (
                     < Square
-                        key={i}
+                        key={player._id}
                         position={renderedPosition[i]}
                         color={i}
                     />

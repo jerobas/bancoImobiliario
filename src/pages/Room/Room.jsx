@@ -27,12 +27,15 @@ export default function Room() {
     };
   }, []);
 
-  let popstateCounter = 0;
-
-window.addEventListener('popstate', () => {
-  if (popstateCounter === 0) {
-    popstateCounter++;
-    socket.emit('removePlayer');
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+      window.addEventListener("popstate", removeUser);
+    };
+  }, []);
+  const removeUser = () => {
+    socket.emit('rooms:leave', id);
     socket.on('updateRooms', (data) => {
       if (data && data.numberOfRooms > 0) {
         dispatch({
@@ -42,7 +45,10 @@ window.addEventListener('popstate', () => {
       }
     });
   }
-});
+  const alertUser = (e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
 
   useEffect(() => {
     if (messagesRef.current) {

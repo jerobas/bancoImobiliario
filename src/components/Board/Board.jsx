@@ -110,7 +110,7 @@ export default function Board() {
             setUserOwner(data)
         })
         socket.emit('rooms:getUsers', id)
-        socket.on('returnPlayer', (data) => {
+        socket.on('returnPlayer', async (data) => {
             setNumberOfPlayers(data.length)
             const aux = arrayFromLength(data.length)
             setRenderedPosition(aux.map(() => {

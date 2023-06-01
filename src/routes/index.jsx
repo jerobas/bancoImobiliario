@@ -2,11 +2,11 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
 
-import {isAlreadyAuthenticated} from '../services/Auth'
 
 import Login from '../pages/Login/Login';
 import Room from '../pages/Room/Room'
 import Rooms from '../pages/Rooms/Rooms';
+import {isAlreadyAuthenticated} from '../services/Auth'
 import { socket } from '../services/Auth';
 
 

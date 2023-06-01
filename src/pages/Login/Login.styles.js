@@ -6,10 +6,10 @@ export const Styles = {
     align-items: center;
     display: flex;
     height: 100%;
-    width: 100%;
-    padding: 1rem;
     justify-content: center;
     justify-self: center;
+    padding: 1rem;
+    width: 100%;
     
   `,
   Content: styled.div`
@@ -21,20 +21,20 @@ export const Styles = {
 
     form{
       display: flex;
-      justify-content: space-around;
       flex-direction: column;
+      justify-content: space-around;
 
       input{
         background-color: ${props => props.theme.colors.White_400};
         border: none;
         border-radius: 8px;
         height: 1.75rem;
+        margin-bottom: 0.5rem;
         outline: solid;
         outline-color: ${props => props.theme.dark.blue};
         outline-width: 0.1rem;
         padding: 0 .8rem;
         width: 100%;
-        margin-bottom: 0.5rem;
 
         &::placeholder{
           color: black;
@@ -48,11 +48,11 @@ export const Styles = {
     cursor: default;
     display: flex;
     flex-wrap: wrap;
-    text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
     letter-spacing: 0.075rem;
     margin: 2rem;
+    text-align: center;
     @media (max-width: 768px) {
       line-height: 2rem;
     }

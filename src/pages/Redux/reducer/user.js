@@ -1,5 +1,5 @@
-import { LOGIN_SUCCESS  } from '../actions/user';
 import {saveUserInStorage} from '../../../services/Auth'
+import { LOGIN_SUCCESS  } from '../actions/user';
 
 const initialState = {
     isAuthenticatedLocal: false,

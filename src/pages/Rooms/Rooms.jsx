@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 import Layout from '../../components/Layout/Layout';
 import { socket } from '../../services/Auth';
+import {getUserFromLocalStorage} from '../../services/Auth'
 import CreateRoom from '../CreateRoom/CreateRoom';
 import JoinRoom from '../JoinRoom/JoinRoom';
 import { Row, Column, RoomsContainer, RoomsPage, Button, RoomStyle } from './Rooms.styles';
-import {getUserFromLocalStorage} from '../../services/Auth'
 
 export default function Rooms() {
     const navigate = useNavigate();

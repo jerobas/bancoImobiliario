@@ -15,9 +15,9 @@ export const Column = styled.div`
 `;
 
 export const Row = styled.div`
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
 `;
 
 export const RoomsContainer = styled(Column)`
@@ -33,8 +33,8 @@ export const RoomsContainer = styled(Column)`
         border-radius: 8px;
         height: 2rem;
         outline: none;
-        width: 100%;
         padding: 0 .5rem;
+        width: 100%;
     }
 `;
 
@@ -65,9 +65,9 @@ export const Button = styled.button`
 
 export const RoomsPage = styled(Column)`
     color: #FFFFFF;
-    padding: 2rem;
-    justify-content: start;
     height: 80%;
+    justify-content: start;
+    padding: 2rem;
     h1, h2 {	
         color: #FFFFFF;
     }

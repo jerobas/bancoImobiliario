@@ -1,15 +1,16 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import {getUserFromLocalStorage} from '../../services/Auth'
 
 import Modal from '../../components/Modal/Modal';
+import {getUserFromLocalStorage} from '../../services/Auth'
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
 import { Container, ErrorMessage } from './CreateRoom.styles'
@@ -44,6 +45,9 @@ export default function CreateRom({
     const handleCreateRoom = (data) => {
         if (data.name) {
             socket.emit('rooms:create', {roomName: data.name, password:data.password, owner:user})
+            socket.on('errorMessage', data => {
+                console.log(data)
+            })
             socket.on('roomId', roomId => {
                 socket.emit('rooms:join', {
                     roomId: roomId,
@@ -52,6 +56,14 @@ export default function CreateRom({
                 })     
                 socket.on('joined', flag => {
                     if(flag){
+                        toast.success('Sala criada com sucesso!', {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            });
                         socket.emit('rooms:getAll');
                         socket.on('updateRooms', (data) => {
                             dispatch({
@@ -60,7 +72,7 @@ export default function CreateRom({
                             })
                         })
                         navigate(`/room/${roomId}`)       
-                    }
+                    } else alert('sa')
                 })
                     
             })

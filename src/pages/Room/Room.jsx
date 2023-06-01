@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react'
 import { BsFillChatDotsFill, BsFillSendFill } from 'react-icons/bs'
-import { useParams  } from 'react-router-dom'
-import {getUserFromLocalStorage} from '../../services/Auth'
 import {useDispatch }from 'react-redux'
+import { useParams  } from 'react-router-dom'
 
 import Board from '../../components/Board/Board';
 import Layout from '../../components/Layout/Layout';
+import {getUserFromLocalStorage} from '../../services/Auth'
 import { socket } from '../../services/Auth';
 import {globalTheme} from '../../styles/theme/global.theme'
 import { Styles } from './Room.styles'

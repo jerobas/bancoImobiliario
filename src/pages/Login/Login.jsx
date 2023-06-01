@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-
-import Layout from '../../components/Layout/Layout';
-import { Styles, buttonVariants } from './Login.styles'
 import { useForm } from 'react-hook-form'
-
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+
+import Layout from '../../components/Layout/Layout';
 import {saveUserInStorage} from '../../services/Auth'
+import { Styles, buttonVariants } from './Login.styles'
 const userSchema = z.object({
   name: z.string().nonempty('O nome é obrigatório!').min(1, 'Precisa ter no mínimo 1 letra!').max(20, 'Pode ter no máximo 15 letras!'),
 })

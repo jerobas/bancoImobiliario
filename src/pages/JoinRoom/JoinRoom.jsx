@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import {getUserFromLocalStorage} from '../../services/Auth'
-
 import Modal from '../../components/Modal/Modal';
+import {getUserFromLocalStorage} from '../../services/Auth'
 import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
 import { Container, ErrorMessage } from './JoinRoom.styles'

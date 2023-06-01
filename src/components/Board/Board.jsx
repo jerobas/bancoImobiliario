@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import { useParams } from 'react-router-dom';
 import { getUserFromLocalStorage } from '../../services/Auth';
-import { BoardContainer, Cell, Cards, ImageContainer, Luck, StartGame, Square, Wrapper, GameLayout, PlayersContainer} from './Board.styles'
+import { BoardContainer, Cell, ImageContainer, StartGame, Square, Wrapper, GameLayout, PlayersContainer} from './Board.styles'
 
 import { socket } from '../../services/Auth'
 
@@ -126,7 +126,7 @@ export default function Board() {
         socket.on('gameStateUpdated', data => handleGameStateUpdate(data))
     }, [])
 
-    const handleStartGame = () => {
+    const handleStartGame = () => {          
         socket.emit('rooms:start', id)
     }
 
@@ -134,7 +134,7 @@ export default function Board() {
         <Wrapper>
             <div>
             {
-                diceWinners[currentTurn] && diceWinners[currentTurn] == socket._opts.hostname && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
+                diceWinners[currentTurn] && diceWinners[currentTurn] == ('127.0.0.1' || socket._opts.hostname) && <button onClick={() => handleDice()} disabled={buttonDisabled}>Rodar dados!</button>
             }
             </div>
             <div style={{background: 'white'}}>
@@ -142,7 +142,7 @@ export default function Board() {
             </div>
             <br />
             {
-                !visible &&  userOwner === socket._opts.hostname &&
+                !visible &&  userOwner === ('127.0.0.1' || socket._opts.hostname) &&
                 <StartGame
                 onClick={handleStartGame}
                 >
@@ -155,7 +155,7 @@ export default function Board() {
                     players && players.map((player, i) => {
                         return(
                             <div key={player._id} style={{display: 'flex', flexDirection: 'column', background: 'white'}}>
-                                <span>{player.userName} {player.userIP ===  socket._opts.hostname && < FaCrown />}</span>
+                                <span>{player.userName} {userOwner ===  ('127.0.0.1' || socket._opts.hostname) && < FaCrown />}</span>
                                 <span>Dinheiro: R${player.money}</span>
                             </div>
                         )

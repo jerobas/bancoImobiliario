@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
 
 import Login from '../pages/Login/Login';
@@ -12,23 +12,6 @@ import { socket } from '../services/Auth';
 
 const PrivateRoute = ({ component: Component, ...rest}) => {
     const isAuthenticatedLocal = isAlreadyAuthenticated()
-    
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        socket.emit('rooms:getAll');
-        socket.on('updateRooms', (data) => {
-            if(data && data.numberOfRooms > 0){
-                dispatch({
-                    type: 'ROOMS',
-                    payload: data
-                })
-            }
-            
-        })
-    }, [])
-
-
 
     return isAuthenticatedLocal ? (
         <Component {...rest} />
@@ -38,6 +21,23 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
 }
 
 export default function RoutesPage() {
+
+    useEffect(() => {
+        socket.on('errorMessage', data => {
+            toast.error(data, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
+        })
+        return () => {
+            socket.off('errorMessage')
+        }
+    },[])
+
     return (
         <Router>
             <Switch>

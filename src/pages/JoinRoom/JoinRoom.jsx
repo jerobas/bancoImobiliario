@@ -1,16 +1,12 @@
 import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
-import { useSelector } from 'react-redux'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import Modal from '../../components/Modal/Modal';
-import {getUserFromLocalStorage} from '../../services/Auth'
-import { socket } from '../../services/Auth';
 import { Column } from '../Rooms/Rooms.styles';
 import { Container, ErrorMessage } from './JoinRoom.styles'
-
 
 
 const joinRoomSchema = z.object({
@@ -25,10 +21,9 @@ const CustomColumn = ({ children }) => <Column style={{
 }}>{children}</Column>
 
 export default function JoinRoom({
-    handleClose, isOpen, roomName, roomId
+    handleClose, isOpen, roomName
 }) {
 
-    const user = getUserFromLocalStorage()
 
     const {
         register,
@@ -43,12 +38,7 @@ export default function JoinRoom({
 
     const handleJoinRoom = (data) => {
         if (data.password) {
-            socket.emit('rooms:join', {
-                roomId: roomId,
-                password: data.password,
-                userEmail: user
-            })
-            handleClose()
+            handleClose(data.password)
         }
     }
 

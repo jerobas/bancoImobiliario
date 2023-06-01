@@ -1,8 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,8 +27,6 @@ const CustomColumn = ({ children }) => <Column style={{
 export default function CreateRom({
     handleClose, isOpen
 }) {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
     const user = getUserFromLocalStorage()
     const {
         register,
@@ -45,38 +41,23 @@ export default function CreateRom({
     const handleCreateRoom = (data) => {
         if (data.name) {
             socket.emit('rooms:create', {roomName: data.name, password:data.password, owner:user})
-            socket.on('errorMessage', data => {
-                console.log(data)
+            socket.once('created', room => {
+                if(room){
+                    toast.success('Sala criada com sucesso!', {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    });
+                }
+                handleClose({
+                    name: room.roomId,
+                    password:room.password,
+                    hasPassword: room.password.length > 0 && true
+                })    
             })
-            socket.on('roomId', roomId => {
-                socket.emit('rooms:join', {
-                    roomId: roomId,
-                    password: data.password,
-                    userEmail: user
-                })     
-                socket.on('joined', flag => {
-                    if(flag){
-                        toast.success('Sala criada com sucesso!', {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            });
-                        socket.emit('rooms:getAll');
-                        socket.on('updateRooms', (data) => {
-                            dispatch({
-                                type: 'ROOMS',
-                                payload: data
-                            })
-                        })
-                        navigate(`/room/${roomId}`)       
-                    } else alert('sa')
-                })
-                    
-            })
-            handleClose()
         }
     }
 

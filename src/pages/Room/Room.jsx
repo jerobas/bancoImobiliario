@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { BsFillChatDotsFill, BsFillSendFill } from 'react-icons/bs'
-import {useDispatch }from 'react-redux'
-import { useParams  } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import Board from '../../components/Board/Board';
 import Layout from '../../components/Layout/Layout';
@@ -13,7 +12,6 @@ import { Styles } from './Room.styles'
 export default function Room() {
   const user = getUserFromLocalStorage()
   const { id } = useParams()
-  const dispatch = useDispatch();
   const messagesRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -23,32 +21,10 @@ export default function Room() {
       setMessages((prevMessages) => [...prevMessages, { users, message }]);
     });
     return () => {
+      socket.emit('rooms:leave', id);
       socket.off('receiveMessage');
     };
   }, []);
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    return () => {
-      window.removeEventListener("beforeunload", alertUser);
-      window.addEventListener("popstate", removeUser);
-    };
-  }, []);
-  const removeUser = () => {
-    socket.emit('rooms:leave', id);
-    socket.on('updateRooms', (data) => {
-      if (data && data.numberOfRooms > 0) {
-        dispatch({
-          type: 'ROOMS',
-          payload: data,
-        });
-      }
-    });
-  }
-  const alertUser = (e) => {
-    e.preventDefault();
-    e.returnValue = "";
-  };
 
   useEffect(() => {
     if (messagesRef.current) {
@@ -69,7 +45,6 @@ export default function Room() {
   };
 
  
-
   return (
     <Layout>
       <Styles.Container>

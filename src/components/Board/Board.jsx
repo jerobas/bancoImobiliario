@@ -126,7 +126,7 @@ export default function Board() {
         socket.on('gameStateUpdated', data => handleGameStateUpdate(data))
     }, [])
 
-    const handleStartGame = () => {          
+    const handleStartGame = () => {     
         socket.emit('rooms:start', id)
     }
 

@@ -10,6 +10,8 @@ import { arrayFromLength, mapBoard } from '../../utils'
 
 import { FaCrown} from 'react-icons/fa'
 
+import CellData from '../../cells.json'
+
 export default function Board() {
     const { id } = useParams()
     const user = getUserFromLocalStorage()
@@ -35,8 +37,8 @@ export default function Board() {
 
     const getPosition = (i) => {
         if (componentsRef.current[i]) {
-            const componentPosition = componentsRef.current[i].getBoundingClientRect();
-            return { x: componentPosition.x + componentPosition.width / 2, y: componentPosition.y + componentPosition.height / 2 }
+            const componentPosition = componentsRef.current[i].parentNode;
+            return { x: componentPosition.offsetLeft + componentPosition.clientWidth / 2, y: componentPosition.offsetTop + componentPosition.clientHeight / 2 }
         }
     };
 
@@ -97,6 +99,9 @@ export default function Board() {
             socket.on('playersStates', (data) => {
                 setPlayers(data.users)
                 setCurrentTurn(data.currentTurn)
+            })
+            socket.on('willBuy', data => {
+                // console.log(data)
             })
             setDiceWinners(data.diceWinners) 
             setCurrentTurn(data.currentTurn)
@@ -171,13 +176,19 @@ export default function Board() {
                     <Cell key={`cell-${index}`}>
                         {mapBoard(index, cells.length) + 1}
                         {
+                                // <div key={CellData[index].id}>
+                                //     <span>{CellData[index].name}</span>
+                                //     <span>{CellData[index].price}</span>
+                                // </div>
+                        }
+                        {
                             ...players?.map((_, i) => {
                                 return (
                                     currentCellPosition[i] === mapBoard(index, cells.length) && <div
                                         style={{
                                             position: 'absolute',
                                             width: '100%',
-                                            height: '100%'
+                                            height: '100%',
                                         }}
                                         ref={el => componentsRef.current[i] = el}
                                     />
@@ -201,9 +212,6 @@ export default function Board() {
 
         </BoardContainer >
           }
-           <PlayersContainer>
-
-            </PlayersContainer>
           </GameLayout>
         </Wrapper>
     );

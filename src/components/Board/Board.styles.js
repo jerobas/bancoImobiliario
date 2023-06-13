@@ -32,7 +32,7 @@ export const Wrapper = styled.div`
     width: 8rem;
   }
 
-` 
+`
 
 export const GameLayout = styled.div`
   align-items: center;
@@ -50,6 +50,7 @@ export const BoardContainer = styled.div`
   grid-template-rows: repeat(11, 30px);
   margin: 0 auto;
   max-width: 880px;
+  transform: rotateX(56deg) rotateZ(45deg);
 `;
 
 export const PlayersContainer = styled.div`
@@ -58,7 +59,7 @@ export const PlayersContainer = styled.div`
   height: 100%;
   justify-content: space-between;
 
-` 
+`
 
 export const StartGame = styled.button`
   align-items: center;
@@ -82,28 +83,6 @@ export const StartGame = styled.button`
 `
 
 
-export const Cards = styled.div`
- align-self: flex-start;
-  background-color: blue;
-  border-radius: 8px;
-  display: flex;
-  height: 15px;
-  margin: .785rem;
-  padding: 2rem;
-  width: 15px;
-`
-
-export const Luck = styled.div`
-  align-self: flex-end;
-  background-color: blue;
-  border-radius: 8px;
-  display: flex;
-  height: 15px;
-  margin: .785rem;
-  padding: 2rem;
-  width: 15px;
-`
-
 export const ImageContainer = styled.div`
   background-color: #fff;
   display: flex;
@@ -111,6 +90,7 @@ export const ImageContainer = styled.div`
   grid-column: 2 / span 9;
   grid-row: 2 / span 9;
   justify-content: space-between;
+  transform-style: preserve-3d; 
 `;
 
 
@@ -125,14 +105,10 @@ export const Cell = styled.div`
   justify-content: center;
   justify-items: center;
   position: relative;
-  
 `;
-
 export const Square = styled.div`
   background-color: ${props => playerColor[props.color](props)};
   border-radius: 50%;
-  grid-column: 4;
-  grid-row: 1;
   height: 10px;
   left: ${props => props.position.x1}px;
   margin: -5px 0 0 -5px;

@@ -18,9 +18,11 @@ import { socket } from "../../services/Auth";
 
 import { arrayFromLength, mapBoard } from "../../utils";
 
-import { FaCrown, FaTimes, FaMoneyBillAlt } from "react-icons/fa";
+import { FaCrown, FaTimes, FaCheck } from "react-icons/fa";
 
 import Modal from "../Modal/Modal";
+
+import Card from "../../assets/card.png";
 
 import CellData from "../../cells.json";
 import GifTeemo from "../../assets/teemo.gif";
@@ -182,9 +184,9 @@ export default function Board() {
   };
 
   const handleBuy = (data) => {
-    socket.emit("buyResponse", data)
-    setIsOpen(false)
-  }
+    socket.emit("buyResponse", data);
+    setIsOpen(false);
+  };
 
   return (
     <Wrapper>
@@ -238,42 +240,43 @@ export default function Board() {
               style={{
                 padding: "1rem",
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 alignItems: "center",
                 border: "none",
               }}
             >
+              <h1>Deseja Comprar?</h1>
+            </header>
+            <div>
               <div
                 style={{
-                  height: "36px",
-                  width: "36px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              />
-              <h1>Deseja Comprar</h1>
-            </header>
-            <main>
-              <div>
-                <p>name</p>
-                <p>card image</p>
-                <p>price</p>
-                <button onClick={()=> handleBuy(true)}>
-                  <FaMoneyBillAlt
-                    style={{
-                      fontSize: "20px",
-                      color: "#00f00f",
-                    }}
-                  />
-                </button>
-                <button onClick={() => handleBuy(false)}>
-                  <FaTimes
-                    style={{
-                      fontSize: "20px",
-                      color: "#ff0000",
-                    }}
-                  />
-                </button>
+              >
+                <img src={Card} style={{ padding: "1rem" }} />
+                <div>
+                  <button onClick={() => handleBuy(true)}>
+                    <FaCheck
+                      style={{
+                        fontSize: "20px",
+                        color: "#00AF53",
+                      }}
+                    />
+                  </button>
+                  <button onClick={() => handleBuy(false)}>
+                    <FaTimes
+                      style={{
+                        fontSize: "20px",
+                        color: "#ff0000",
+                      }}
+                    />
+                  </button>
+                </div>
               </div>
-            </main>
+            </div>
           </Container>
         </Modal>
       )}

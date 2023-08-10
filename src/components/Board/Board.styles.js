@@ -19,6 +19,7 @@ export const Wrapper = styled.div`
   >div{
     min-height: 2rem;
   }
+  
 
   button{
     background-color: green;
@@ -116,4 +117,5 @@ export const Square = styled.div`
   top: ${props => props.position.y1}px;
   transition: left 0.5s ease, top 0.5s ease;
   width: 10px;
+
 `;

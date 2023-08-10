@@ -33,8 +33,23 @@ export default function RoutesPage() {
                 draggable: true,
             })
         })
+        socket.on('eventMessage', data => {
+            toast.info(data, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
+        })
+        socket.on('myIP', data => {
+            localStorage.setItem("IP", JSON.stringify(data))
+        })
         return () => {
+            socket.off('myIP')
             socket.off('errorMessage')
+            socket.off('eventMessage')
         }
     },[])
 

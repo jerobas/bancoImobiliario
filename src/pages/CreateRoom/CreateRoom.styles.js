@@ -15,15 +15,15 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
-  }
 
-  *{
     h1{
     color: ${props => props.theme.dark.blue};
     font-size: 2rem;
     font-weight: bold;
+    }
+  
   }
-  }
+
 
   main {
     padding: 30px;

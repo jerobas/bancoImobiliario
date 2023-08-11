@@ -2,9 +2,9 @@ import React from "react";
 
 import { Container } from "../../pages/CreateRoom/CreateRoom.styles";
 
-import Modal from "../../components/Modal/Modal";
+import Modal from "../Modal/Modal";
 
-import { FaTimes, FaCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 import { socket } from "../../services/Auth";
 
@@ -16,14 +16,14 @@ export default function BuyForm({ open, setOpen }) {
     setOpen();
   };
 
+  const handleOutsideClick = (e) => {
+    if (open && e.target === e.currentTarget) {
+      handleBuy(false);
+    }
+  };
+
   return (
-    <Modal
-      visible={open}
-      hasHeight={true}
-      height="min-content"
-      hasWidth={true}
-      width="400px"
-    >
+    <Modal visible={open} onClick={handleOutsideClick}>
       <Container>
         <header
           style={{
@@ -52,15 +52,7 @@ export default function BuyForm({ open, setOpen }) {
                   style={{
                     fontSize: "20px",
                     color: "#00AF53",
-                    marginRight: '5px',
-                  }}
-                />
-              </button>
-              <button onClick={() => handleBuy(false)}>
-                <FaTimes
-                  style={{
-                    fontSize: "20px",
-                    color: "#ff0000",
+                    marginRight: "5px",
                   }}
                 />
               </button>

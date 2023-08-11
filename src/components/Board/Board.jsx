@@ -13,7 +13,9 @@ import {
   PlayersContainer,
 } from "./Board.styles";
 
-import BuyForm from "../../utils/functions/BuyForm";
+import BuyForm from "../Forms/BuyForm";
+
+import CardModal from "../Card/CardModal.jsx";
 
 import { socket } from "../../services/Auth";
 
@@ -29,6 +31,10 @@ export default function Board() {
   const cells = Array.from(Array(40)).map((_) => 1);
   const [dices, setDices] = useState([0, 0]);
 
+  const [showCardModal, setShowCardModal] = useState({
+    visible: false,
+    data: null,
+  });
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [numberOfPlayers, setNumberOfPlayers] = useState(0);
   const componentsRef = useRef(
@@ -119,9 +125,11 @@ export default function Board() {
     }
     if (Number(currentCellPosition[i]) === Number(player.position)) {
       setTimeout(() => {
-        setCanShow(true);
         setButtonDisabled(false);
       }, 400);
+      setTimeout(() => {
+        setCanShow(true);
+      }, 1000);
     }
   };
 
@@ -144,10 +152,16 @@ export default function Board() {
         );
         setColoredCells((oldState) => {
           let _temp = [...oldState];
+          let resIndex = findColorByOwnerCell(_temp, data?.currentCell.id);
+          if (resIndex != null) {
+            let newIndex = _temp[resIndex].findIndex(
+              (elem) => elem == data?.currentCell.id
+            );
+            _temp.splice(newIndex, 1);
+          }
           _temp[userIndex] = [..._temp[userIndex], data?.currentCell.id];
           return _temp;
         });
-        console.log(data?.newRoom?.users, data?.currentUser, data?.currentCell);
       });
       socket.on("willBuy", (data) => {
         if (data && data.canBuy) {
@@ -193,8 +207,16 @@ export default function Board() {
   };
 
   const handleClose = () => {
-    setIsOpen(false);
     setCanShow(false);
+    setIsOpen(false);
+  };
+
+  const handleShowCardModal = (index) => {
+    setShowCardModal({ visible: true, data: index });
+  };
+
+  const handleCloseCardData = () => {
+    setShowCardModal({ ...showCardModal, visible: false });
   };
 
   return (
@@ -206,6 +228,11 @@ export default function Board() {
           </button>
         )}
       </div>
+      <CardModal
+        open={showCardModal.visible}
+        data={showCardModal.data}
+        close={handleCloseCardData}
+      />
       <div>
         {players.map(
           (player) =>
@@ -236,7 +263,7 @@ export default function Board() {
       {!visible && userOwner === ip && (
         <StartGame onClick={handleStartGame}>Start</StartGame>
       )}
-      {willBuy.canBuy === true && canShow && (
+      {willBuy.canBuy === true && canShow === true && (
         <BuyForm open={isOpen} setOpen={handleClose} />
       )}
       <GameLayout>
@@ -249,7 +276,7 @@ export default function Board() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    background: "white",
+                    background: "white"
                   }}
                 >
                   <span>
@@ -263,7 +290,16 @@ export default function Board() {
         {visible && (
           <BoardContainer>
             {cells.map((_, index) => (
-              <Cell key={`cell-${index}`} ownerCell={findColorByOwnerCell(coloredCells, mapBoard(index, cells.length))}>
+              <Cell
+                key={`cell-${index}`}
+                ownerCell={findColorByOwnerCell(
+                  coloredCells,
+                  mapBoard(index, cells.length)
+                )}
+                onClick={() =>
+                  handleShowCardModal(mapBoard(index, cells.length))
+                }
+              >
                 {mapBoard(index, cells.length) + 1}
                 {...players?.map((_, i) => {
                   return (

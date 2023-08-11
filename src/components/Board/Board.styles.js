@@ -102,6 +102,7 @@ export const Cell = styled.div`
   justify-content: center;
   justify-items: center;
   position: relative;
+  cursor: pointer;
 `;
 export const Square = styled.div`
   background-color: ${(props) => playerColor[props.color](props)};

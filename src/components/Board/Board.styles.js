@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const playerColor = {
-  0: props => props.theme.dark.green,
-  1: props => props.theme.dark.blue,
-  2: props => props.theme.dark.pink,
-  3: props => props.theme.dark.yellow
-}
+  0: (props) => props.theme.dark.green,
+  1: (props) => props.theme.dark.blue,
+  2: (props) => props.theme.dark.pink,
+  3: (props) => props.theme.dark.yellow,
+};
 
 export const Wrapper = styled.div`
   align-items: center;
@@ -16,12 +16,11 @@ export const Wrapper = styled.div`
   padding: 1.2rem;
   width: 100%;
 
-  >div{
+  > div {
     min-height: 2rem;
   }
-  
 
-  button{
+  button {
     background-color: green;
     border: none;
     border-radius: 8px;
@@ -32,8 +31,7 @@ export const Wrapper = styled.div`
     letter-spacing: 1.2px;
     width: 8rem;
   }
-
-`
+`;
 
 export const GameLayout = styled.div`
   align-items: center;
@@ -41,7 +39,7 @@ export const GameLayout = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   height: 100%;
   width: 100%;
-`
+`;
 
 export const BoardContainer = styled.div`
   border: none;
@@ -59,15 +57,14 @@ export const PlayersContainer = styled.div`
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
-
-`
+`;
 
 export const StartGame = styled.button`
   align-items: center;
-  background-color: ${props => props.theme.dark.blue};
+  background-color: ${(props) => props.theme.dark.blue};
   border: none;
   border-radius: 8px;
-  color: ${props => props.theme.colors.White_300};
+  color: ${(props) => props.theme.colors.White_300};
   display: flex;
   font-size: 1.4rem;
   font-weight: bold;
@@ -78,11 +75,10 @@ export const StartGame = styled.button`
   padding: 0.075rem;
   width: 4.5rem;
 
-  &:focus{
-    border-color: ${props => props.theme.darkest.blue};
+  &:focus {
+    border-color: ${(props) => props.theme.darkest.blue};
   }
-`
-
+`;
 
 export const ImageContainer = styled.div`
   background-color: #fff;
@@ -91,14 +87,14 @@ export const ImageContainer = styled.div`
   grid-column: 2 / span 9;
   grid-row: 2 / span 9;
   justify-content: space-between;
-  transform-style: preserve-3d; 
+  transform-style: preserve-3d;
 `;
-
 
 export const Cell = styled.div`
   align-content: center;
   align-items: center;
-  background-color: #fff;
+  background-color: ${(props) =>
+    props.ownerCell == null ? "#fff" : playerColor[props.ownerCell]};
   border: 1px solid black;
   display: flex;
   font-size: 12px;
@@ -108,14 +104,13 @@ export const Cell = styled.div`
   position: relative;
 `;
 export const Square = styled.div`
-  background-color: ${props => playerColor[props.color](props)};
+  background-color: ${(props) => playerColor[props.color](props)};
   border-radius: 50%;
   height: 10px;
-  left: ${props => props.position.x1}px;
+  left: ${(props) => props.position.x1}px;
   margin: -5px 0 0 -5px;
   position: absolute;
-  top: ${props => props.position.y1}px;
+  top: ${(props) => props.position.y1}px;
   transition: left 0.5s ease, top 0.5s ease;
   width: 10px;
-
 `;

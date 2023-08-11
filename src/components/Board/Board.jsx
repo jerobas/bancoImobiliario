@@ -12,21 +12,14 @@ import {
   GameLayout,
   PlayersContainer,
 } from "./Board.styles";
-import { Container } from "../../pages/CreateRoom/CreateRoom.styles";
+
+import BuyForm from "../../utils/functions/BuyForm";
 
 import { socket } from "../../services/Auth";
 
-import { arrayFromLength, mapBoard } from "../../utils";
+import { arrayFromLength, mapBoard, findColorByOwnerCell } from "../../utils";
 
-import { FaCrown, FaTimes, FaCheck } from "react-icons/fa";
-
-import Modal from "../Modal/Modal";
-
-import Card from "../../assets/card.png";
-
-import CellData from "../../cells.json";
-import GifTeemo from "../../assets/teemo.gif";
-import TeemoStop from "../../assets/teemoStop.png";
+import { FaCrown } from "react-icons/fa";
 
 export default function Board() {
   const { id } = useParams();
@@ -52,6 +45,10 @@ export default function Board() {
     canBuy: false,
     willBuy: false,
   });
+  const [coloredCells, setColoredCells] = useState(
+    [...Array(4).keys()].map(() => [])
+  );
+  const [canShow, setCanShow] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [recalculate, setRecalculate] = useState(false);
   const recalculatePosition = () => setRecalculate(!recalculate);
@@ -122,8 +119,9 @@ export default function Board() {
     }
     if (Number(currentCellPosition[i]) === Number(player.position)) {
       setTimeout(() => {
+        setCanShow(true);
         setButtonDisabled(false);
-      }, 200);
+      }, 400);
     }
   };
 
@@ -139,6 +137,17 @@ export default function Board() {
       socket.on("playersStates", (data) => {
         setPlayers(data.users);
         setCurrentTurn(data.currentTurn);
+      });
+      socket.on("buyedCell", (data) => {
+        let userIndex = data?.newRoom?.users.findIndex(
+          (elem) => elem._id === data?.currentUser._id
+        );
+        setColoredCells((oldState) => {
+          let _temp = [...oldState];
+          _temp[userIndex] = [..._temp[userIndex], data?.currentCell.id];
+          return _temp;
+        });
+        console.log(data?.newRoom?.users, data?.currentUser, data?.currentCell);
       });
       socket.on("willBuy", (data) => {
         if (data && data.canBuy) {
@@ -183,9 +192,9 @@ export default function Board() {
     socket.emit("rooms:start", id);
   };
 
-  const handleBuy = (data) => {
-    socket.emit("buyResponse", data);
+  const handleClose = () => {
     setIsOpen(false);
+    setCanShow(false);
   };
 
   return (
@@ -227,58 +236,8 @@ export default function Board() {
       {!visible && userOwner === ip && (
         <StartGame onClick={handleStartGame}>Start</StartGame>
       )}
-      {willBuy.canBuy === true && (
-        <Modal
-          visible={isOpen}
-          hasHeight={true}
-          height="min-content"
-          hasWidth={true}
-          width="400px"
-        >
-          <Container>
-            <header
-              style={{
-                padding: "1rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                border: "none",
-              }}
-            >
-              <h1>Deseja Comprar?</h1>
-            </header>
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <img src={Card} style={{ padding: "1rem" }} />
-                <div>
-                  <button onClick={() => handleBuy(true)}>
-                    <FaCheck
-                      style={{
-                        fontSize: "20px",
-                        color: "#00AF53",
-                      }}
-                    />
-                  </button>
-                  <button onClick={() => handleBuy(false)}>
-                    <FaTimes
-                      style={{
-                        fontSize: "20px",
-                        color: "#ff0000",
-                      }}
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </Modal>
+      {willBuy.canBuy === true && canShow && (
+        <BuyForm open={isOpen} setOpen={handleClose} />
       )}
       <GameLayout>
         <PlayersContainer>
@@ -304,14 +263,8 @@ export default function Board() {
         {visible && (
           <BoardContainer>
             {cells.map((_, index) => (
-              <Cell key={`cell-${index}`}>
+              <Cell key={`cell-${index}`} ownerCell={findColorByOwnerCell(coloredCells, mapBoard(index, cells.length))}>
                 {mapBoard(index, cells.length) + 1}
-                {
-                  // <div key={CellData[index].id}>
-                  //     <span>{CellData[index].name}</span>
-                  //     <span>{CellData[index].price}</span>
-                  // </div>
-                }
                 {...players?.map((_, i) => {
                   return (
                     currentCellPosition[i] ===

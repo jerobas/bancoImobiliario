@@ -87,8 +87,8 @@ export default function Board() {
     socket.emit("rooms:rollDices", {
       roomId: id,
       value: {
-        d1: d1,
-        d2: d2,
+        d1: 2,
+        d2: 2,
       },
       userEmail: user,
       numberOfCells: cells.length,
@@ -239,7 +239,7 @@ export default function Board() {
             player.userIP === ip &&
             player.state === 3 &&
             player.money >= 50 && (
-              <div>
+              <div key={player.userIP}>
                 <button
                   onClick={() => {
                     handlePayToLeave(player);
@@ -280,7 +280,7 @@ export default function Board() {
                   }}
                 >
                   <span>
-                    {player.userName} {userOwner === ip && <FaCrown />}
+                    {player.userName} {userOwner === player.userIP && <FaCrown />}
                   </span>
                   <span>Dinheiro: R${player.money}</span>
                 </div>

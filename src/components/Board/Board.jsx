@@ -157,7 +157,7 @@ export default function Board() {
             let newIndex = _temp[resIndex].findIndex(
               (elem) => elem == data?.currentCell.id
             );
-            _temp.splice(newIndex, 1);
+            _temp[resIndex].splice(newIndex, 1);
           }
           _temp[userIndex] = [..._temp[userIndex], data?.currentCell.id];
           return _temp;

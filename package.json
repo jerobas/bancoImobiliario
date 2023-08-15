@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "crypto-js": "^4.1.1",
+    "express": "^4.18.2",
     "framer-motion": "^10.12.12",
     "million": "^2.5.13",
     "polished": "^4.2.2",

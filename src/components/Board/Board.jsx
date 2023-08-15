@@ -10,7 +10,6 @@ import {
   Square,
   Wrapper,
   GameLayout,
-  PlayersContainer,
 } from "./Board.styles";
 
 import BuyForm from "../Forms/BuyForm";
@@ -21,7 +20,7 @@ import { socket } from "../../services/Auth";
 
 import { arrayFromLength, mapBoard, findColorByOwnerCell } from "../../utils";
 
-import { FaCrown } from "react-icons/fa";
+import LeaderBoard from "../LeaderBoard/LeaderBoard.jsx";
 
 export default function Board() {
   const { id } = useParams();
@@ -40,6 +39,7 @@ export default function Board() {
   const componentsRef = useRef(
     [...Array(numberOfPlayers).keys()].map(() => null)
   );
+  const [openLeaderBoard, setOpenLeaderBoard] = useState(false);
   const [players, setPlayers] = useState([]);
   const [currentCellPosition, setCurrentCellPosition] = useState([]);
   const [renderedPosition, setRenderedPosition] = useState([]);
@@ -87,8 +87,8 @@ export default function Board() {
     socket.emit("rooms:rollDices", {
       roomId: id,
       value: {
-        d1: 2,
-        d2: 2,
+        d1: d1,
+        d2: d2,
       },
       userEmail: user,
       numberOfCells: cells.length,
@@ -200,6 +200,15 @@ export default function Board() {
       setCurrentCellPosition(aux.map(() => 0));
     });
     socket.on("gameStateUpdated", (data) => handleGameStateUpdate(data));
+    const handleKeyDown = (e) => {
+      if (e.key == "Control") {
+        setOpenLeaderBoard(true);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleStartGame = () => {
@@ -219,6 +228,10 @@ export default function Board() {
     setShowCardModal({ ...showCardModal, visible: false });
   };
 
+  const handleCloseLeaderBoard = () => {
+    setOpenLeaderBoard(false);
+  };
+
   return (
     <Wrapper>
       <div>
@@ -234,30 +247,29 @@ export default function Board() {
         close={handleCloseCardData}
       />
       <div>
-        {players.map(
-          (player) =>
-            player.userIP === ip &&
-            player.state === 3 &&
-            player.money >= 50 && (
-              <div key={player.userIP}>
-                <button
-                  onClick={() => {
-                    handlePayToLeave(player);
-                  }}
-                >
-                  pague
-                </button>{" "}
-                <button onClick={() => handleDice()} disabled={buttonDisabled}>
-                  não pague
-                </button>
-              </div>
-            )
-        )}
-      </div>
-      <div style={{ background: "white" }}>
-        <span>
-          Dados: {dices[0]} + {dices[1]}
-        </span>
+        {diceWinners[currentTurn] &&
+          diceWinners[currentTurn] == ip &&
+          players.map(
+            (player) =>
+              player.userIP === ip &&
+              player.state === 3 && (
+                <div key={player.userIP}>
+                  <button
+                    onClick={() => {
+                      handlePayToLeave(player);
+                    }}
+                  >
+                    pague
+                  </button>{" "}
+                  <button
+                    onClick={() => handleDice()}
+                    disabled={buttonDisabled}
+                  >
+                    não pague
+                  </button>
+                </div>
+              )
+          )}
       </div>
       <br />
       {!visible && userOwner === ip && (
@@ -266,27 +278,16 @@ export default function Board() {
       {willBuy.canBuy === true && canShow === true && (
         <BuyForm open={isOpen} setOpen={handleClose} />
       )}
+      {players && players.length > 0 && (
+        <LeaderBoard
+          players={players}
+          userOwner={userOwner}
+          isOpen={openLeaderBoard}
+          setOpen={handleCloseLeaderBoard}
+        />
+      )}
+
       <GameLayout>
-        <PlayersContainer>
-          {players &&
-            players.map((player, i) => {
-              return (
-                <div
-                  key={player._id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    background: "white"
-                  }}
-                >
-                  <span>
-                    {player.userName} {userOwner === player.userIP && <FaCrown />}
-                  </span>
-                  <span>Dinheiro: R${player.money}</span>
-                </div>
-              );
-            })}
-        </PlayersContainer>
         {visible && (
           <BoardContainer>
             {cells.map((_, index) => (

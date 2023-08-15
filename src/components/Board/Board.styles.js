@@ -35,9 +35,9 @@ export const Wrapper = styled.div`
 
 export const GameLayout = styled.div`
   align-items: center;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
   height: 100%;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -50,13 +50,6 @@ export const BoardContainer = styled.div`
   margin: 0 auto;
   max-width: 880px;
   transform: rotateX(56deg) rotateZ(45deg);
-`;
-
-export const PlayersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
 `;
 
 export const StartGame = styled.button`
@@ -96,13 +89,13 @@ export const Cell = styled.div`
   background-color: ${(props) =>
     props.ownerCell == null ? "#fff" : playerColor[props.ownerCell]};
   border: 1px solid black;
+  cursor: pointer;
   display: flex;
   font-size: 12px;
   font-weight: bold;
   justify-content: center;
   justify-items: center;
   position: relative;
-  cursor: pointer;
 `;
 export const Square = styled.div`
   background-color: ${(props) => playerColor[props.color](props)};

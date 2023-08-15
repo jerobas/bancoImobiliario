@@ -1,7 +1,6 @@
 import React from "react";
 
 import Modal from "../Modal/Modal";
-
 import { Wrapper } from "./CardModas.styles";
 
 export default function CardModal({ open, data, close }) {

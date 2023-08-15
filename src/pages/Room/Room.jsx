@@ -48,10 +48,7 @@ export default function Room() {
   return (
     <Layout>
       <Styles.Container>
-        <Styles.GameArea>
-          <Board />
-        </Styles.GameArea>
-
+      <Board />
         <Styles.ChatArea>
           <Styles.ChatContainer>
             <ul ref={messagesRef}>
@@ -81,7 +78,6 @@ export default function Room() {
           </Styles.ChatContainer>
         </Styles.ChatArea>
       </Styles.Container>
-
     </Layout>
   )
 }

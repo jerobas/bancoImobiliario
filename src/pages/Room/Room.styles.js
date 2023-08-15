@@ -4,7 +4,7 @@ export const Styles = {
     Container: styled.div`
         align-items: center;
         display: flex;
-        flex-direction: column;
+        flex-direction: row-reverse;
         height: 80%;
         justify-content: space-around;
         width: 90%;

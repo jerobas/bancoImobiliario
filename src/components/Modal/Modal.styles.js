@@ -23,13 +23,13 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.section`
+  align-items: center;
+  align-self: center;
   background-color: ${props => props.theme.colors.quaternary};
   border-radius: 8px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
   height: ${(props) => props.hasHeight ? props.height : "100%"};
+  justify-content: center;
   padding: 1.5rem;
   width: ${(props) => props.hasWidth ? props.width : "100%"};
 `

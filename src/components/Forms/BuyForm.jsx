@@ -1,16 +1,19 @@
-import React from "react";
-
-import { Container } from "../../pages/CreateRoom/CreateRoom.styles";
-
-import Modal from "../Modal/Modal";
-
+import React, { useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 
-import { socket } from "../../services/Auth";
-
 import Card from "../../assets/card.png";
+import { Container } from "../../pages/CreateRoom/CreateRoom.styles";
+import { socket } from "../../services/Auth";
+import Modal from "../Modal/Modal";
 
 export default function BuyForm({ open, setOpen }) {
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleBuy(false);
+    }, 4200);
+  }, []);
+
   const handleBuy = (data) => {
     socket.emit("buyResponse", data);
     setOpen();

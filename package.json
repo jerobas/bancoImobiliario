@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
     "serve": "yarn build && vite preview",
     "preview": "vite preview"
   },
@@ -17,6 +17,7 @@
     "axios": "^1.4.0",
     "crypto-js": "^4.1.1",
     "framer-motion": "^10.12.12",
+    "million": "^2.5.13",
     "polished": "^4.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

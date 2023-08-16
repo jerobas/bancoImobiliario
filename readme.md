@@ -1,11 +1,11 @@
-# League of Estates - Jogo de Tabuleiro Inspirado no League of Legends
+# Lopoly - Jogo de Tabuleiro Inspirado no League of Legends
 
 Bem-vindo ao repositório do projeto League of Estates! Este é um emocionante jogo de tabuleiro inspirado no universo do League of Legends, com elementos semelhantes ao clássico Banco Imobiliário. O projeto está em seus estágios iniciais de desenvolvimento e está sendo criado por entusiastas apaixonados nas suas horas vagas.
 
 
 ## Sobre o Jogo
 
-O League of Estates é uma emocionante mistura de estratégia e diversão, trazendo o universo do League of Legends para o clássico formato de jogo de tabuleiro. Neste jogo, os jogadores podem comprar, vender e negociar propriedades baseadas em locais icônicos do League of Legends, enquanto competem uns contra os outros para construir um império imobiliário de sucesso.
+O Lopoly é uma emocionante mistura de estratégia e diversão, trazendo o universo do League of Legends para o clássico formato de jogo de tabuleiro. Neste jogo, os jogadores podem comprar, vender e negociar propriedades baseadas em locais icônicos do League of Legends, enquanto competem uns contra os outros para construir um império imobiliário de sucesso.
 
 ## Tecnologias Utilizadas
 

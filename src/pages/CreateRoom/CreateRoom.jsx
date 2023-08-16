@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaTimes } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

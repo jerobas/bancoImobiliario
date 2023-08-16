@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 
 import Card from "../../assets/card.png";
@@ -7,13 +7,18 @@ import { socket } from "../../services/Auth";
 import Modal from "../Modal/Modal";
 
 export default function BuyForm({ open, setOpen }) {
+  const [delayedBuy, setDelayedBuy] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      handleBuy(false);
-    }, 4200);
-  }, []);
+    if (delayedBuy) {
+      const timeoutId = setTimeout(() => {
+        handleBuy(false);
+      }, 4200);
 
+      return () => clearTimeout(timeoutId);
+    }
+  }, [delayedBuy]);
+  
   const handleBuy = (data) => {
     socket.emit("buyResponse", data);
     setOpen();
